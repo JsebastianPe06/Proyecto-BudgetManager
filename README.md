@@ -32,7 +32,7 @@ El proyecto está diseñado bajo un estilo de **Monolito Clásico en Tres Capas*
 
 ## Vista de desarrollo
 
-<img width="1580" height="941" alt="digrama uml" src="https://github.com/user-attachments/assets/2ebc6462-b847-4398-8ef2-6d18d36b3f72" />
+<img width="1580" height="941" alt="digrama uml" src="https://github.com/user-attachments/assets/2ebc6462-b847-4398-8ef2-6d18d36b3f72" />  
 
 
 ---
