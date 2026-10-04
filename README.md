@@ -1,8 +1,14 @@
-# Proyecto-BudgetManeger
+# Proyecto-BudgetManager
 Proyecto enfocado en suplir la necesidad de las personas de controlar y gestionar sus finanzas, con la capacidad de plantear metas y tener en cuenta el tiempo.
 
 ![Java](https://img.shields.io/badge/Java-21-orange.svg)
 ![SQLite](https://img.shields.io/badge/SQLite-3-blue.svg)
+
+Intregantes: 
+Juan Sebastian Peñuela - jupenuelad@unal.edu.co
+Juan Kandula Restrepo - juarestrepoba@unal.edu.co
+Julián Andrés Sepulveda - jsepulvedacr@unal.edu.co
+Alejandro Jimenez - aljimenezp@unal.edu.co
 
 Aplicación web monolítica para el control, planificación y seguimiento de finanzas personales. Permite registrar ingresos y gastos, definir presupuestos por categoría, establecer metas de ahorro y monitorear el rendimiento financiero mediante reportes consolidados.
 
