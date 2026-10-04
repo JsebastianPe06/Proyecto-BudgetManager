@@ -45,4 +45,5 @@ El proyecto está diseñado bajo un estilo de **Monolito Clásico en Tres Capas*
 
 ## Vista de despliegue
 
-<img width="1270" height="853" alt="Diagrama en blanco" src="https://github.com/user-attachments/assets/7b94bfbd-d417-40f2-94cf-b1b2b67cef32" />
+<img width="1270" height="861" alt="Diagrama en blanco" src="https://github.com/user-attachments/assets/5d66179d-73b4-4261-886d-4462d5bc0cce" />
+
