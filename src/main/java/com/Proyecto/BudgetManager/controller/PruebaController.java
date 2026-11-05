@@ -18,7 +18,7 @@ public class PruebaController {
     @GetMapping("/holanombre/{name}")  //para visualizar, final de url con variables. Ejemplo: localhost:8080/waos/holanombre/Juan
     public String hola(@PathVariable String name)
     {
-        return "Hola Mundo!!!! :v   "+ name;
+        return "Hola Mundo!!!! :v :  "+ name;
     }
 }
 
