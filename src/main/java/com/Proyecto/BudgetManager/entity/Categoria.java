@@ -17,16 +17,16 @@ public class Categoria
     private String descripcion;
     private TipoCategoria tipo; //(gasto/ingrso) 
     
-    private boolean custom; //false si es preterminado
-    private int ownerId;    //quien hizo la categoria, null si es del sistema/preterminado
+    //Podrian ser utiles para cuando se implemente que el usuario pueda hacer sus propias categorias
+    //private boolean custom; //false si es preterminado, tru si custom
+    //private int ownerId;    //quien hizo la categoria, null si es del sistema/preterminado
 
-    public Categoria(int id, String name, String descripcion, TipoCategoria tipo, boolean custom, int ownerId) {
+    public Categoria(int id, String name, String descripcion, TipoCategoria tipo/*, boolean custom, int ownerId*/) {
         this.id = id;
         this.name = name;
         this.descripcion = descripcion;
         this.tipo = tipo;
-        this.custom = custom;
-        this.ownerId = ownerId;
+        
     }
 
     public int getId() {
@@ -44,14 +44,4 @@ public class Categoria
     public TipoCategoria getTipo() {
         return tipo;
     }
-
-    public boolean isCustom() {
-        return custom;
-    }
-
-    public int getOwnerId() {
-        return ownerId;
-    }
-    
-    
 }

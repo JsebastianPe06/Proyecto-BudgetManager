@@ -16,12 +16,28 @@ public class Movimiento
     private TipoMovimiento tipo;
     private int categoriaId;
 
+    //Atributos especiales de gasto
     private PrioridadGasto prioridad;
     private TipoGasto tipoGasto;
 
+    //Constructor de Gasto
     public Movimiento(int id, int userId, String descripccion, BigDecimal monto, fecha date, 
             TipoMovimiento tipo, int categoriaId, PrioridadGasto prioridad, TipoGasto tipoGasto) {
         
+        this.id = id;
+        this.userId = userId;
+        this.descripccion = descripccion;
+        this.monto = monto; //Ingresar el monto negativo?
+        this.date = date;
+        this.tipo = tipo;
+        this.categoriaId = categoriaId;
+        this.prioridad = prioridad;
+        this.tipoGasto = tipoGasto;
+    }
+
+    //Constructor de Ingreso
+    public Movimiento(int id, int userId, String descripccion, BigDecimal monto, fecha date,
+            TipoMovimiento tipo, int categoriaId) {
         this.id = id;
         this.userId = userId;
         this.descripccion = descripccion;
@@ -29,9 +45,8 @@ public class Movimiento
         this.date = date;
         this.tipo = tipo;
         this.categoriaId = categoriaId;
-        this.prioridad = prioridad;
-        this.tipoGasto = tipoGasto;
     }
+    
 
     public int getId() {
         return id;
