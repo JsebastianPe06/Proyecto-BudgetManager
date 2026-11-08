@@ -45,6 +45,8 @@ public class Movimiento
         this.date = date;
         this.tipo = tipo;
         this.categoriaId = categoriaId;
+        this.prioridad = null;
+        this.tipoGasto = null;
     }
     
 
