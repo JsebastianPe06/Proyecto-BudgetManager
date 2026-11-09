@@ -7,15 +7,15 @@ public class BudgetCategoria
 {    
     private int id;
     private int budgetId;
-    private int categoryId;
+    private int categoriaId;
 
     private BigDecimal limite;
     private BudgetEstado estado;
 
-    public BudgetCategoria(int id, int budgetId, int categoryId, BigDecimal limite, BudgetEstado estado) {
+    public BudgetCategoria(int id, int budgetId, int categoriaId, BigDecimal limite, BudgetEstado estado) {
         this.id = id;
         this.budgetId = budgetId;
-        this.categoryId = categoryId;
+        this.categoriaId = categoriaId;
         this.limite = limite;
         this.estado = estado;
     }
@@ -29,7 +29,7 @@ public class BudgetCategoria
     }
 
     public int getCategoryId() {
-        return categoryId;
+        return categoriaId;
     }
 
     public BigDecimal getLimite() {

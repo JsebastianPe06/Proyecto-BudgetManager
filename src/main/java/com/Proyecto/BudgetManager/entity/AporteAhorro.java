@@ -6,14 +6,14 @@ import java.math.BigDecimal;
 public class AporteAhorro 
 {
     private int id;
-    private int MetalId;
+    private int MetaId;
 
     private BigDecimal monto;
     private fecha fecha;
 
-    public AporteAhorro(int id, int MetalId, BigDecimal monto, fecha fecha) {
+    public AporteAhorro(int id, int MetaId, BigDecimal monto, fecha fecha) {
         this.id = id;
-        this.MetalId = MetalId;
+        this.MetaId = MetaId;
         this.monto = monto;
         this.fecha = fecha;
     }
@@ -22,8 +22,8 @@ public class AporteAhorro
         return id;
     }
 
-    public int getMetalId() {
-        return MetalId;
+    public int getMetaId() {
+        return MetaId;
     }
 
     public BigDecimal getMonto() {

@@ -14,13 +14,12 @@ import java.math.BigDecimal;
 // @Service
 public class TransactionService {
     
-    MovimientoValid movimientoValid;
-    CategoriaValid categoriaValid;
+    MovimientoValid movimientoValid = new MovimientoValid();
+    CategoriaValid categoriaValid= new CategoriaValid();;
     
     public void registrarGasto(int userId,String descripcion, BigDecimal monto,fecha date, Categoria categoria, 
             PrioridadGasto prioridad, TipoGasto tipo) 
     {
-        //para el Id del movimiento creo que iria una notacion Spring
         Movimiento move = new Movimiento(0, userId,descripcion, monto, date, TipoMovimiento.GASTO, categoria.getId(),
                 prioridad,tipo);
 
@@ -30,12 +29,20 @@ public class TransactionService {
 
         categoriaValid.validarTipo(categoria, move.getTipo());
 
-        MovimientoRepository.guardar(move);
+        // MovimientoRepository.guardar(move);
     }
     
-    public void registrarIngreso()
+    public void registrarIngreso(int userId,String descripcion, BigDecimal monto,fecha date, Categoria categoria) 
     {
-        
+        Movimiento move = new Movimiento(0, userId,descripcion, monto, date, TipoMovimiento.INGRESO, categoria.getId());
+
+        movimientoValid.validar(move);
+
+        categoriaValid.validarPropiedad(categoria, userId);
+
+        categoriaValid.validarTipo(categoria, move.getTipo());
+
+        //MovimientoRepository.guardar(move);
     }
 
     public void getMovimientosPorPerido()
@@ -43,9 +50,9 @@ public class TransactionService {
         
     }
 
-    public void eliminarMovimiento()
+    public void eliminarMovimiento(int userId,int Id)
     {
-        
+        //MovimientoRepository.eliminar(Id, userId);
     }
     
 }

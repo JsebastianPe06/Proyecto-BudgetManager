@@ -1,6 +1,5 @@
 package com.Proyecto.BudgetManager.service;
 
-
 public class BudgetService {
     
     public void crearBudget()
@@ -13,7 +12,12 @@ public class BudgetService {
         
     }
 
-    public void evaluarBudget()
+    public void evaluarBudgetGeneral()
+    {
+        
+    }
+    
+    public void evaliarBudgetCategoria()
     {
         
     }

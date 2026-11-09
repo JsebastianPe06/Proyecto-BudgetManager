@@ -27,6 +27,16 @@ public class CategoriaValid {
 
     public void validarTipo(Categoria categoria, TipoMovimiento tipoMove) 
     {
+        if (categoria == null) 
+        {            
+            throw new IllegalArgumentException("La categoría no existe");
+        }
+        
+        if (tipoMove == null) 
+        {            
+            throw new IllegalArgumentException("El tipo de movimiento es obligatorio");
+        }
+        
         TipoCategoria tipoEsperado;
         
         if (tipoMove == TipoMovimiento.INGRESO) 
@@ -44,4 +54,3 @@ public class CategoriaValid {
         }
     }
 }
-
