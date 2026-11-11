@@ -1,6 +1,5 @@
 package com.Proyecto.BudgetManager.entity;
 
-
 public class fecha {
     private int dia;
     private int mes;
@@ -23,5 +22,4 @@ public class fecha {
     public int getYear() {
         return year;
     }
-    
 }
