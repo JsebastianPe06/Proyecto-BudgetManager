@@ -32,3 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 /src/test/java/
+
+
+### SQLite ###
+*.db
+backups/
