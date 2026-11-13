@@ -46,5 +46,9 @@ public class Categoria
     public int getOwnerId() {
         return ownerId;
     }
+
+    public Categoria orElseThrow() {
+        throw new UnsupportedOperationException("No existe la Categoria"); 
+    }
     
 }

@@ -85,6 +85,10 @@ public class Movimiento
     public TipoGasto getTipoGasto() {
         return tipoGasto;
     }
+
+    public Movimiento orElseThrow() {
+        throw new UnsupportedOperationException("No existe el Movimiento");
+    }
     
     
 

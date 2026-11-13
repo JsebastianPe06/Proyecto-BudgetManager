@@ -1,27 +1,34 @@
 package com.Proyecto.BudgetManager.service;
 
 import com.Proyecto.BudgetManager.domain.CategoriaValid;
+import com.Proyecto.BudgetManager.domain.DateManager;
 import com.Proyecto.BudgetManager.domain.MovimientoValid;
+import com.Proyecto.BudgetManager.dto.GastoForm;
+import com.Proyecto.BudgetManager.dto.IngresoForm;
 import com.Proyecto.BudgetManager.entity.Categoria;
 import com.Proyecto.BudgetManager.entity.Movimiento;
 import com.Proyecto.BudgetManager.entity.fecha;
-import com.Proyecto.BudgetManager.enums.PrioridadGasto;
-import com.Proyecto.BudgetManager.enums.TipoGasto;
 import com.Proyecto.BudgetManager.enums.TipoMovimiento;
+import com.Proyecto.BudgetManager.repository.CategoriaRepository;
 import com.Proyecto.BudgetManager.repository.MovimientoRepository;
-import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import org.springframework.stereotype.Service;
 
-// @Service
+@Service
 public class TransactionService {
     
-    MovimientoValid movimientoValid = new MovimientoValid();
-    CategoriaValid categoriaValid= new CategoriaValid();;
+    private final MovimientoValid movimientoValid = new MovimientoValid();
+    private final CategoriaValid categoriaValid= new CategoriaValid();;
     
-    public void registrarGasto(int userId,String descripcion, BigDecimal monto,fecha date, Categoria categoria, 
-            PrioridadGasto prioridad, TipoGasto tipo) 
+    public void registrarGasto(int userId, GastoForm form) 
     {
-        Movimiento move = new Movimiento(0, userId,descripcion, monto, date, TipoMovimiento.GASTO, categoria.getId(),
-                prioridad,tipo);
+        Categoria categoria = CategoriaRepository.findById(form.getCategoriaId()).orElseThrow();
+        
+        fecha date = DateManager.aFecha(form.getFecha());
+        
+        Movimiento move = new Movimiento(0, userId,form.getDescripcion(), form.getMonto(), date,
+                TipoMovimiento.GASTO, form.getCategoriaId(),form.getPrioridad(),form.getTipoGasto());
 
         movimientoValid.validar(move);
 
@@ -32,9 +39,14 @@ public class TransactionService {
         // MovimientoRepository.guardar(move);
     }
     
-    public void registrarIngreso(int userId,String descripcion, BigDecimal monto,fecha date, Categoria categoria) 
+    public void registrarIngreso(int userId, IngresoForm form) 
     {
-        Movimiento move = new Movimiento(0, userId,descripcion, monto, date, TipoMovimiento.INGRESO, categoria.getId());
+        Categoria categoria = CategoriaRepository.findById(form.getCategoriaId()).orElseThrow();
+        
+        fecha date = DateManager.aFecha(form.getFecha());
+        
+        Movimiento move = new Movimiento(0, userId,form.getDescripcion(), form.getMonto(), date,
+                TipoMovimiento.INGRESO, form.getCategoriaId());
 
         movimientoValid.validar(move);
 
@@ -45,14 +57,22 @@ public class TransactionService {
         //MovimientoRepository.guardar(move);
     }
 
-    public void getMovimientosPorPerido()
+    public List<Movimiento> getMovimientosPorPeriodo(int userId,LocalDate fechaInicial,LocalDate fechaFinal)   
     {
+        List<Movimiento> moves = null; 
         
+        fecha dateInicial = DateManager.aFecha(fechaInicial);
+        fecha dateFinal = DateManager.aFecha(fechaFinal);
+        
+        // moves = MovimientoRepository.findBy????(userId,dateInicial,dateFinal).orElseThrow();
+        
+        return moves;
     }
 
-    public void eliminarMovimiento(int userId,int Id)
+    public void eliminarMovimiento(int userId,int moveId)
     {
-        //MovimientoRepository.eliminar(Id, userId);
+        Movimiento move = MovimientoRepository.findByIdAndUserId(moveId, userId).orElseThrow();
+
+        MovimientoRepository.eliminar(move.getId());
     }
-    
 }

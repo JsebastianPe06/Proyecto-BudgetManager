@@ -46,6 +46,10 @@ public class MetaAhorro
     public fecha getFechaFinal() {
         return fechaFinal;
     }
+
+    public MetaAhorro orElseThrow() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
     
 }

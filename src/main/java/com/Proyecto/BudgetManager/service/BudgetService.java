@@ -1,6 +1,7 @@
 package com.Proyecto.BudgetManager.service;
 
 import com.Proyecto.BudgetManager.domain.BudgetValid;
+import com.Proyecto.BudgetManager.domain.DateManager;
 import com.Proyecto.BudgetManager.domain.EstadoPresupuesto;
 import com.Proyecto.BudgetManager.dto.BudgetForm;
 import com.Proyecto.BudgetManager.dto.BudgetResumenDTO;
@@ -45,7 +46,7 @@ public class BudgetService {
         }
 
         Budget budget = new Budget(0, userId, form.getTotalLimite(),
-                aFecha(form.getFechaInicio()), aFecha(form.getFechaFinal()), BudgetEstado.NORMAL);
+                DateManager.aFecha(form.getFechaInicio()), DateManager.aFecha(form.getFechaFinal()), BudgetEstado.NORMAL);
 
         budgetValid.validar(budget);
 
@@ -81,7 +82,7 @@ public class BudgetService {
     {
         Budget budget = buscarBudgetDelUsuario(userId, budgetId);
         BigDecimal gastado = sumarGastosPeriodo(userId,
-                aLocalDate(budget.getFechaInicio()), aLocalDate(budget.getFechaFinal()));
+                DateManager.aLocalDate(budget.getFechaInicio()), DateManager.aLocalDate(budget.getFechaFinal()));
 
         return estadoPresupuesto.calcularEstado(gastado, budget.getTotalLimite());
     }
@@ -115,7 +116,7 @@ public class BudgetService {
             if (limite.getCategoryId() == categoriaId)
             {
                 BigDecimal gastado = sumarGastosCategoria(userId, categoriaId,
-                        aLocalDate(budget.getFechaInicio()), aLocalDate(budget.getFechaFinal()));
+                        DateManager.aLocalDate(budget.getFechaInicio()), DateManager.aLocalDate(budget.getFechaFinal()));
                 return estadoPresupuesto.estadoConGasto(gastado, limite.getLimite(), monto);
             }
         }
@@ -126,8 +127,8 @@ public class BudgetService {
     public BudgetResumenDTO getBudgetResumen(int userId, int budgetId)
     {
         Budget budget = buscarBudgetDelUsuario(userId, budgetId);
-        LocalDate desde = aLocalDate(budget.getFechaInicio());
-        LocalDate hasta = aLocalDate(budget.getFechaFinal());
+        LocalDate desde = DateManager.aLocalDate(budget.getFechaInicio());
+        LocalDate hasta = DateManager.aLocalDate(budget.getFechaFinal());
 
         BigDecimal gastado = sumarGastosPeriodo(userId, desde, hasta);
         BigDecimal limite = budget.getTotalLimite();
@@ -156,7 +157,7 @@ public class BudgetService {
     {
         BigDecimal limite = limiteCategoria.getLimite();
         BigDecimal gastado = sumarGastosCategoria(userId, limiteCategoria.getCategoryId(),
-                aLocalDate(budget.getFechaInicio()), aLocalDate(budget.getFechaFinal()));
+                DateManager.aLocalDate(budget.getFechaInicio()), DateManager.aLocalDate(budget.getFechaFinal()));
         Categoria categoria = buscarCategoria(limiteCategoria.getCategoryId());
 
         return new CategoriaEstadoDTO(
@@ -182,26 +183,6 @@ public class BudgetService {
             throw new IllegalArgumentException("No puedes ver ni modificar este presupuesto");
         }
         return budget;
-    }
-
-    /** Convierte la fecha del formulario (LocalDate) a la clase fecha del equipo. */
-    private static fecha aFecha(LocalDate date)
-    {
-        if (date == null)
-        {
-            return null;
-        }
-        return new fecha(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-    }
-
-    /** Convierte la clase fecha del equipo a LocalDate (para DTOs y consultas). */
-    private static LocalDate aLocalDate(fecha date)
-    {
-        if (date == null)
-        {
-            return null;
-        }
-        return LocalDate.of(date.getYear(), date.getMes(), date.getDia());
     }
 
     // ------------------------------------------------------------------
