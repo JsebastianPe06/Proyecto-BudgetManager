@@ -39,7 +39,9 @@ public class EstadoPresupuesto {
     {
         BigDecimal porcentaje = porcentajeUsado(gastado, limite);
 
-        if (porcentaje.compareTo(CIEN) > 0)
+           // Se compara con los montos (no con el porcentaje redondeado) para que
+           // pasarse por $1 ya cuente como EXCEDIDO.
+        if (gastado.compareTo(limite) > 0)
         {
             return BudgetEstado.EXCEDIDO;
         }
