@@ -2,13 +2,18 @@ package com.Proyecto.BudgetManager.entity;
 
 import java.math.BigDecimal;
 
+import lombok.Getter;
+
 
 public class AporteAhorro 
 {
+    @Getter 
     private int id;
+    @Getter 
     private int MetaId;
-
+    @Getter 
     private BigDecimal monto;
+    @Getter 
     private fecha fecha;
 
     public AporteAhorro(int id, int MetaId, BigDecimal monto, fecha fecha) {
@@ -17,22 +22,4 @@ public class AporteAhorro
         this.monto = monto;
         this.fecha = fecha;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public int getMetaId() {
-        return MetaId;
-    }
-
-    public BigDecimal getMonto() {
-        return monto;
-    }
-
-    public fecha getFecha() {
-        return fecha;
-    }
-    
-    
 }

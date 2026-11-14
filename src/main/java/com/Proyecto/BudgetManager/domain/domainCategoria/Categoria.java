@@ -1,17 +1,21 @@
-package com.Proyecto.BudgetManager.entity;
+package com.Proyecto.BudgetManager.domain.domainCategoria;
 
 import com.Proyecto.BudgetManager.enums.TipoCategoria;
+import lombok.Getter;
 
 public class Categoria 
 {
+    @Getter 
     private int id;
+    @Getter 
     private String name;
+    @Getter 
     private String descripcion;
+    @Getter 
     private TipoCategoria tipo; //(gasto/ingrso) 
-    
-    //Pense que las categorias personalizadas deberian tener el id de quien lo creo, 
-    // asi el usuario solo ve las predetermindas y sus categorias
+    @Getter
     private boolean custom; //false si es preterminado, tru si custom
+    @Getter 
     private int ownerId;    //quien hizo la categoria, 0 (cero) si es del sistema/preterminado
 
     public Categoria(int id, String name, String descripcion, TipoCategoria tipo, boolean custom, int ownerId) {
@@ -22,29 +26,4 @@ public class Categoria
         this.custom = custom;
         this.ownerId = ownerId;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public TipoCategoria getTipo() {
-        return tipo;
-    }
-
-    public boolean isCustom() {
-        return custom;
-    }
-
-    public int getOwnerId() {
-        return ownerId;
-    }
-    
 }

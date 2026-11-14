@@ -93,7 +93,7 @@ public class BudgetService {
 
         for (BudgetCategoria limite : buscarLimitesDelBudget(budgetId))
         {
-            if (limite.getCategoryId() == categoriaId)
+            if (limite.getCategoriaId() == categoriaId)
             {
                 return armarEstadoCategoria(userId, budget, limite);
             }
@@ -112,7 +112,7 @@ public class BudgetService {
 
         for (BudgetCategoria limite : buscarLimitesDelBudget(budgetId))
         {
-            if (limite.getCategoryId() == categoriaId)
+            if (limite.getCategoriaId() == categoriaId)
             {
                 BigDecimal gastado = sumarGastosCategoria(userId, categoriaId,
                         aLocalDate(budget.getFechaInicio()), aLocalDate(budget.getFechaFinal()));
@@ -155,12 +155,12 @@ public class BudgetService {
     private CategoriaEstadoDTO armarEstadoCategoria(int userId, Budget budget, BudgetCategoria limiteCategoria)
     {
         BigDecimal limite = limiteCategoria.getLimite();
-        BigDecimal gastado = sumarGastosCategoria(userId, limiteCategoria.getCategoryId(),
+        BigDecimal gastado = sumarGastosCategoria(userId, limiteCategoria.getCategoriaId(),
                 aLocalDate(budget.getFechaInicio()), aLocalDate(budget.getFechaFinal()));
-        Categoria categoria = buscarCategoria(limiteCategoria.getCategoryId());
+        Categoria categoria = buscarCategoria(limiteCategoria.getCategoriaId());
 
         return new CategoriaEstadoDTO(
-                limiteCategoria.getCategoryId(),
+                limiteCategoria.getCategoriaId(),
                 categoria.getName(),
                 limite,
                 gastado,

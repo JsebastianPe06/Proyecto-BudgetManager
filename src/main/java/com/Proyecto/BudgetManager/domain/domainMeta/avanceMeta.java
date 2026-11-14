@@ -1,35 +1,24 @@
 package com.Proyecto.BudgetManager.domain;
 import java.math.BigDecimal;
 import com.Proyecto.BudgetManager.entity.fecha;
-import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
+import com.Proyecto.BudgetManager.entity.MetaAhorro;
 
 public class avanceMeta {
-	@Getter 
-	private fecha fecha_creacion;
-	@Getter @Setter
-	private fecha fecha_finalizacion;
-	@Getter
-	private List<BigDecimal> montos;
-	@Getter @Setter 
-	private BigDecimal objetivo;
-	private List<BigDecimal> nuevos_montos;
 
-	public BigDecimal calcular_faltante() {
-		BigDecimal total = montos.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+	public BigDecimal calcular_faltante(MetaAhorro meta) {
+		BigDecimal total = meta.getMontos().stream().reduce(BigDecimal.ZERO, BigDecimal::add);
 		return total;
 	}
 
-	public float porcentaje() {
+	public float porcentaje(MetaAhorro meta) {
 		/*
 		Reterna el valor del porcentaje faltante a modo de decimal * 100 con regla
 		de 3, razón por la uqe multiplica por 10000 directamente
 		*/
-		BigDecimal total = calcular_faltante();
+		BigDecimal total = calcular_faltante(meta);
 		BigDecimal cien = BigDecimal.valueOf(10000);
 		total = total.multiply(cien);
-		total = total.divide(this.objetivo);
+		total = total.divide(meta.getObjetivo());
 		float porcentaje = total.floatValue();
 		return porcentaje;
 	}

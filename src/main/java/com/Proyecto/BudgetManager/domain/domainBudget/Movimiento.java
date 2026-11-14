@@ -1,27 +1,39 @@
-package com.Proyecto.BudgetManager.entity;
+package com.Proyecto.BudgetManager.domain.domainBudget;
 
+import com.Proyecto.BudgetManager.domain.domainFecha.Fecha;
 import com.Proyecto.BudgetManager.enums.PrioridadGasto;
 import com.Proyecto.BudgetManager.enums.TipoGasto;
 import com.Proyecto.BudgetManager.enums.TipoMovimiento;
+
+import lombok.Getter;
+
 import java.math.BigDecimal;
 
 public class Movimiento 
 {
+    @Getter 
     private int id;
+    @Getter
     private int userId;
+    @Getter 
     private String descripccion;
+    @Getter
     private BigDecimal monto;
-    private fecha date;
-
+    @Getter
+    private Fecha date;
+    @Getter 
     private TipoMovimiento tipo;
+    @Getter 
     private int categoriaId;
 
     //Atributos especiales de gasto
+    @Getter
     private PrioridadGasto prioridad;
+    @Getter 
     private TipoGasto tipoGasto;
 
     //Constructor de Gasto
-    public Movimiento(int id, int userId, String descripccion, BigDecimal monto, fecha date, 
+    public Movimiento(int id, int userId, String descripccion, BigDecimal monto, Fecha date, 
             TipoMovimiento tipo, int categoriaId, PrioridadGasto prioridad, TipoGasto tipoGasto) {
         
         this.id = id;
@@ -36,7 +48,7 @@ public class Movimiento
     }
 
     //Constructor de Ingreso
-    public Movimiento(int id, int userId, String descripccion, BigDecimal monto, fecha date,
+    public Movimiento(int id, int userId, String descripccion, BigDecimal monto, Fecha date,
             TipoMovimiento tipo, int categoriaId) {
         this.id = id;
         this.userId = userId;
@@ -48,45 +60,4 @@ public class Movimiento
         this.prioridad = null;
         this.tipoGasto = null;
     }
-    
-
-    public int getId() {
-        return id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public String getDescripccion() {
-        return descripccion;
-    }
-
-    public BigDecimal getMonto() {
-        return monto;
-    }
-
-    public fecha getDate() {
-        return date;
-    }
-
-    public TipoMovimiento getTipo() {
-        return tipo;
-    }
-
-    public int getCategoriaId() {
-        return categoriaId;
-    }
-
-    public PrioridadGasto getPrioridad() {
-        return prioridad;
-    }
-
-    public TipoGasto getTipoGasto() {
-        return tipoGasto;
-    }
-    
-    
-
-    
 }

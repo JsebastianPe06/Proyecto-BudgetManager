@@ -4,7 +4,7 @@
  */
 package com.Proyecto.BudgetManager.repository;
 
-import com.Proyecto.BudgetManager.entity.AporteAhorro;
+import com.Proyecto.BudgetManager.domain.domainMeta.AporteAhorro;
 
 /**
  *

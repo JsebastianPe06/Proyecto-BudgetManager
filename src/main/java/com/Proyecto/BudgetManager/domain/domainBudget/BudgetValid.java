@@ -47,7 +47,7 @@ public class BudgetValid {
         {
             throw new IllegalArgumentException("El límite y el presupuesto son obligatorios");
         }
-        if (nuevo.getCategoryId() == 0)
+        if (nuevo.getCategoriaId() == 0)
         {
             throw new IllegalArgumentException("La categoría es obligatoria");
         }
@@ -59,7 +59,7 @@ public class BudgetValid {
         // US-03, escenario 2: no puede haber dos límites para la misma categoría
         for (BudgetCategoria existente : existentes)
         {
-            if (existente.getCategoryId() == nuevo.getCategoryId())
+            if (existente.getCategoriaId() == nuevo.getCategoriaId())
             {
                 throw new IllegalArgumentException(
                     "Esta categoría ya tiene un límite en este presupuesto. Edita el existente.");

@@ -1,6 +1,6 @@
 package com.Proyecto.BudgetManager.repository;
 
-import com.Proyecto.BudgetManager.entity.Movimiento;
+import com.Proyecto.BudgetManager.domain.domainBudget.Movimiento;
 
 public class MovimientoRepository {
 

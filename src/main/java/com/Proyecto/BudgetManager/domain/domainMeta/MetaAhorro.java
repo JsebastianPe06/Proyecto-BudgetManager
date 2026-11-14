@@ -1,17 +1,23 @@
 package com.Proyecto.BudgetManager.entity;
 
 import java.math.BigDecimal;
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class MetaAhorro 
 {
+    @Getter
     private int id;
+    @Getter 
     private int userId;
-
+    @Getter 
     private String name;
+    @Getter 
     private BigDecimal objetivo;
-
+    @Getter 
     private fecha fechaInicial;
+    @Getter @Setter 
     private fecha fechaFinal;
 
     public MetaAhorro(int id, int userId, String name, BigDecimal objetivo, fecha fechaInicial, fecha fechaFinal) {
@@ -22,30 +28,4 @@ public class MetaAhorro
         this.fechaInicial = fechaInicial;
         this.fechaFinal = fechaFinal;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public BigDecimal getObjetivo() {
-        return objetivo;
-    }
-
-    public fecha getFechaInicial() {
-        return fechaInicial;
-    }
-
-    public fecha getFechaFinal() {
-        return fechaFinal;
-    }
-    
-    
 }

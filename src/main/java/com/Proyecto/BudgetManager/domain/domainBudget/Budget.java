@@ -2,15 +2,21 @@ package com.Proyecto.BudgetManager.entity;
 
 import com.Proyecto.BudgetManager.enums.BudgetEstado;
 import java.math.BigDecimal;
+import  lombok.Getter;
 
 public class Budget 
 {
+    @Getter
     private int id;
+    @Getter 
     private int userId;
-
+    @Getter 
     private BigDecimal totalLimite;
+    @Getter 
     private fecha fechaInicio;
+    @Getter 
     private fecha fechaFinal;
+    @Getter 
     private BudgetEstado estado;
 
     public Budget(int id, int userId, BigDecimal totalLimite, fecha fechaInicio, fecha fechaFinal, BudgetEstado estado) {
@@ -21,30 +27,4 @@ public class Budget
         this.fechaFinal = fechaFinal;
         this.estado = estado;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public BigDecimal getTotalLimite() {
-        return totalLimite;
-    }
-
-    public fecha getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public fecha getFechaFinal() {
-        return fechaFinal;
-    }
-
-    public BudgetEstado getEstado() {
-        return estado;
-    }
-    
-    
 }
