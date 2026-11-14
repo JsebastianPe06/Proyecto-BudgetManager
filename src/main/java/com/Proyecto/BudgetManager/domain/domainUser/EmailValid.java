@@ -1,4 +1,4 @@
-package com.Proyecto.BudgetManager.domain;
+package com.Proyecto.BudgetManager.domain.domainUser;
 
 import lombok.Getter;
 

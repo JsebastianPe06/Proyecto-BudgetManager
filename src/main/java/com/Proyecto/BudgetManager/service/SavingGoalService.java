@@ -1,12 +1,11 @@
 package com.Proyecto.BudgetManager.service;
 
-import com.Proyecto.BudgetManager.domain.AporteValid;
-import com.Proyecto.BudgetManager.domain.MetaValid;
-import com.Proyecto.BudgetManager.entity.AporteAhorro;
-import com.Proyecto.BudgetManager.entity.MetaAhorro;
-import com.Proyecto.BudgetManager.entity.fecha;
-import com.Proyecto.BudgetManager.repository.AporteAhorroRepository;
-import com.Proyecto.BudgetManager.repository.MetaAhorroRepository;
+
+import com.Proyecto.BudgetManager.domain.domainFecha.Fecha;
+import com.Proyecto.BudgetManager.domain.domainMeta.AporteAhorro;
+import com.Proyecto.BudgetManager.domain.domainMeta.AporteValid;
+import com.Proyecto.BudgetManager.domain.domainMeta.MetaAhorro;
+import com.Proyecto.BudgetManager.domain.domainMeta.MetaValid;
 import java.math.BigDecimal;
 
 public class SavingGoalService {
@@ -14,7 +13,7 @@ public class SavingGoalService {
     MetaValid metaValid = new MetaValid();
     AporteValid aporteValid = new AporteValid();;
     
-    public void crearMeta(int userId, String name, BigDecimal objetivo, fecha fechaInicial, fecha fechaFinal)
+    public void crearMeta(int userId, String name, BigDecimal objetivo, Fecha fechaInicial, Fecha fechaFinal)
     {
         MetaAhorro meta = new MetaAhorro(0, userId, name, objetivo, fechaInicial, fechaFinal);
         
@@ -23,7 +22,7 @@ public class SavingGoalService {
         //MetaAhorroRepository.guardar(meta);
     }
 
-    public void registrarAporte(int metaId, BigDecimal monto, fecha fecha)
+    public void registrarAporte(int metaId, BigDecimal monto, Fecha fecha)
     {
         AporteAhorro aporte = new AporteAhorro(0, metaId, monto, fecha);
         

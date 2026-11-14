@@ -1,6 +1,6 @@
-package com.Proyecto.BudgetManager.domain;
+package com.Proyecto.BudgetManager.domain.domainBudget;
 
-import com.Proyecto.BudgetManager.entity.Budget;
+import com.Proyecto.BudgetManager.domain.domainFecha.FechaValid;
 import com.Proyecto.BudgetManager.entity.BudgetCategoria;
 import java.math.BigDecimal;
 import java.util.List;

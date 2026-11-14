@@ -1,6 +1,7 @@
-package com.Proyecto.BudgetManager.domain;
+package com.Proyecto.BudgetManager.domain.domainMeta;
 
-import com.Proyecto.BudgetManager.entity.MetaAhorro;
+import com.Proyecto.BudgetManager.domain.domainFecha.FechaValid;
+import com.Proyecto.BudgetManager.domain.domainMeta.MetaAhorro;
 import java.math.BigDecimal;
 
 public class MetaValid {

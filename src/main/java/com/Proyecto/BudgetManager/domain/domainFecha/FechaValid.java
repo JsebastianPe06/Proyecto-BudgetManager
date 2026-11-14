@@ -1,12 +1,12 @@
-package com.Proyecto.BudgetManager.domain;
+package com.Proyecto.BudgetManager.domain.domainFecha;
 
-import com.Proyecto.BudgetManager.entity.fecha;
+import com.Proyecto.BudgetManager.domain.domainFecha.Fecha;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
 public class FechaValid {
     
-    public void validar(fecha date) 
+    public void validar(Fecha date) 
     {
         if (date == null) 
         {
@@ -28,7 +28,7 @@ public class FechaValid {
         }
     }
 
-    public void validarOrden(fecha fechaInicial, fecha fechaFinal) 
+    public void validarOrden(Fecha fechaInicial, Fecha fechaFinal) 
     {
         LocalDate inicial = LocalDate.of(fechaInicial.getYear(), fechaInicial.getMes(), fechaInicial.getDia() );
 

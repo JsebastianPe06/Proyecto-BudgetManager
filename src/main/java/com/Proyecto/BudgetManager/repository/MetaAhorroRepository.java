@@ -1,6 +1,6 @@
 package com.Proyecto.BudgetManager.repository;
 
-import com.Proyecto.BudgetManager.entity.MetaAhorro;
+import com.Proyecto.BudgetManager.domain.domainMeta.MetaAhorro;
 
 public class MetaAhorroRepository {
 

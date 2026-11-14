@@ -1,15 +1,15 @@
 package com.Proyecto.BudgetManager.service;
 
-import com.Proyecto.BudgetManager.domain.BudgetValid;
+import com.Proyecto.BudgetManager.domain.domainBudget.BudgetValid;
 import com.Proyecto.BudgetManager.domain.EstadoPresupuesto;
 import com.Proyecto.BudgetManager.dto.BudgetForm;
 import com.Proyecto.BudgetManager.dto.BudgetResumenDTO;
 import com.Proyecto.BudgetManager.dto.CategoriaEstadoDTO;
 import com.Proyecto.BudgetManager.dto.LimiteCategoriaForm;
-import com.Proyecto.BudgetManager.entity.Budget;
+import com.Proyecto.BudgetManager.domain.domainBudget.Budget;
 import com.Proyecto.BudgetManager.entity.BudgetCategoria;
-import com.Proyecto.BudgetManager.entity.Categoria;
-import com.Proyecto.BudgetManager.entity.fecha;
+import com.Proyecto.BudgetManager.domain.domainCategoria.Categoria;
+import com.Proyecto.BudgetManager.domain.domainFecha.Fecha;
 import com.Proyecto.BudgetManager.enums.BudgetEstado;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -185,17 +185,17 @@ public class BudgetService {
     }
 
     /** Convierte la fecha del formulario (LocalDate) a la clase fecha del equipo. */
-    private static fecha aFecha(LocalDate date)
+    private static Fecha aFecha(LocalDate date)
     {
         if (date == null)
         {
             return null;
         }
-        return new fecha(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+        return new Fecha(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
     }
 
     /** Convierte la clase fecha del equipo a LocalDate (para DTOs y consultas). */
-    private static LocalDate aLocalDate(fecha date)
+    private static LocalDate aLocalDate(Fecha date)
     {
         if (date == null)
         {

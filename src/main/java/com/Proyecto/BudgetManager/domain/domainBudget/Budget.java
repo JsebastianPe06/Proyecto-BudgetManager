@@ -1,8 +1,9 @@
-package com.Proyecto.BudgetManager.entity;
+package com.Proyecto.BudgetManager.domain.domainBudget;
 
+import com.Proyecto.BudgetManager.domain.domainFecha.Fecha;
 import com.Proyecto.BudgetManager.enums.BudgetEstado;
 import java.math.BigDecimal;
-import  lombok.Getter;
+import lombok.Getter;
 
 public class Budget 
 {
@@ -13,13 +14,13 @@ public class Budget
     @Getter 
     private BigDecimal totalLimite;
     @Getter 
-    private fecha fechaInicio;
+    private Fecha fechaInicio;
     @Getter 
-    private fecha fechaFinal;
+    private Fecha fechaFinal;
     @Getter 
     private BudgetEstado estado;
 
-    public Budget(int id, int userId, BigDecimal totalLimite, fecha fechaInicio, fecha fechaFinal, BudgetEstado estado) {
+    public Budget(int id, int userId, BigDecimal totalLimite, Fecha fechaInicio, Fecha fechaFinal, BudgetEstado estado) {
         this.id = id;
         this.userId = userId;
         this.totalLimite = totalLimite;
