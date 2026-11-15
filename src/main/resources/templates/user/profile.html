@@ -1,0 +1,6 @@
+<form th:action="@{/profile}" th:object="${profile}" method="post">
+  <label>Nombre <input th:field="*{fullName}"/></label>
+  <label>Correo <input th:field="*{email}" type="email"/></label>
+  <button>Guardar</button>
+</form>
+<p th:if="${param.ok}">Datos actualizados</p>

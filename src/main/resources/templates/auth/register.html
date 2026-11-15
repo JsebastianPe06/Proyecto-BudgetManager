@@ -1,0 +1,15 @@
+<form th:action="@{/auth/register}" th:object="${form}" method="post">
+  <label>Nombre
+    <input th:field="*{fullName}"/>
+    <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+  </label>
+  <label>Correo
+    <input th:field="*{email}" type="email"/>
+    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+  </label>
+  <label>Contraseña
+    <input th:field="*{password}" type="password"/>
+    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+  </label>
+  <button>Crear cuenta</button>
+</form>

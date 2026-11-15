@@ -1,6 +1,5 @@
-package com.Proyecto.BudgetManager.domain;
+package com.Proyecto.BudgetManager.domain.domainCategoria;
 
-import com.Proyecto.BudgetManager.entity.Categoria;
 import com.Proyecto.BudgetManager.enums.TipoCategoria;
 import com.Proyecto.BudgetManager.enums.TipoMovimiento;
 

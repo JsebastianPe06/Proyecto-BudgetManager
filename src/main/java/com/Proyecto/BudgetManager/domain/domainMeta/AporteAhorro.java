@@ -1,6 +1,8 @@
-package com.Proyecto.BudgetManager.entity;
+package com.Proyecto.BudgetManager.domain.domainMeta;
 
 import java.math.BigDecimal;
+
+import com.Proyecto.BudgetManager.domain.domainFecha.Fecha;
 
 import lombok.Getter;
 
@@ -14,9 +16,9 @@ public class AporteAhorro
     @Getter 
     private BigDecimal monto;
     @Getter 
-    private fecha fecha;
+    private Fecha fecha;
 
-    public AporteAhorro(int id, int MetaId, BigDecimal monto, fecha fecha) {
+    public AporteAhorro(int id, int MetaId, BigDecimal monto, Fecha fecha) {
         this.id = id;
         this.MetaId = MetaId;
         this.monto = monto;

@@ -1,6 +1,6 @@
-package com.Proyecto.BudgetManager.domain;
+package com.Proyecto.BudgetManager.domain.domainMeta;
 
-import com.Proyecto.BudgetManager.entity.Movimiento;
+import com.Proyecto.BudgetManager.domain.domainBudget.Movimiento;
 import com.Proyecto.BudgetManager.enums.TipoMovimiento;
 import java.math.BigDecimal;
 

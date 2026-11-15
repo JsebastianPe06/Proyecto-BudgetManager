@@ -1,4 +1,4 @@
-package com.Proyecto.BudgetManager.entity;
+package com.Proyecto.BudgetManager.domain.domainBudget;
 
 import com.Proyecto.BudgetManager.enums.BudgetEstado;
 import java.math.BigDecimal;

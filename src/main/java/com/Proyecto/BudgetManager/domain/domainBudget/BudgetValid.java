@@ -1,9 +1,9 @@
-package com.Proyecto.BudgetManager.domain;
+package com.Proyecto.BudgetManager.domain.domainBudget;
 
-import com.Proyecto.BudgetManager.entity.Budget;
-import com.Proyecto.BudgetManager.entity.BudgetCategoria;
 import java.math.BigDecimal;
 import java.util.List;
+
+import com.Proyecto.BudgetManager.domain.domainFecha.FechaValid;
 
 /**
  * Regla pura: validaciones del presupuesto y de sus límites por categoría (US-03).

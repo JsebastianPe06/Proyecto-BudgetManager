@@ -1,10 +1,10 @@
-package com.Proyecto.BudgetManager.domain;
+package com.Proyecto.BudgetManager.domain.domainMeta;
 
-import com.Proyecto.BudgetManager.entity.AporteAhorro;
+import com.Proyecto.BudgetManager.domain.domainFecha.FechaValid;
+
 import java.math.BigDecimal;
 
 public class AporteValid {
-    
     FechaValid fechaValid = new FechaValid();;
 
     public void validar(AporteAhorro aporte) 

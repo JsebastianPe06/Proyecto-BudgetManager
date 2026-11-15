@@ -1,0 +1,7 @@
+<form th:action="@{/login}" method="post">
+  <input name="username" type="email" required/>
+  <input name="password" type="password" required/>
+  <button>Ingresar</button>
+  <a th:href="@{/auth/register}">Crear cuenta</a>
+</form>
+<p th:if="${param.error}">Credenciales inválidas o cuenta bloqueada</p>
