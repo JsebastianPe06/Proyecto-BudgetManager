@@ -1,28 +1,29 @@
 package com.Proyecto.BudgetManager.security;
 
-import com.Proyecto.BudgetManager.repository.UserRepository;
-import com.Proyecto.BudgetManager.domain.domainUser.LoginAttemptPolicy;
+import com.Proyecto.BudgetManager.service.AuthService;
 
 import jakarta.servlet.http.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
-import java.time.LocalDateTime;
+
+import java.io.IOException;
 
 @Component
 public class LoginFailureHandler implements AuthenticationFailureHandler {
-    private final UserRepository users;
-    public LoginFailureHandler(UserRepository users) { this.users = users; }
+    private final AuthService authService;
+
+    public LoginFailureHandler(AuthService authService) {
+        this.authService = authService;
+    }
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse res,
-                                    AuthenticationException ex) throws java.io.IOException {
+                                        AuthenticationException ex) throws IOException {
         String email = req.getParameter("username");
-        users.findByEmail(email).ifPresent(u -> {u.setFailedAttempts(u.getFailedAttempts() + 1);
-            if (LoginAttemptPolicy.shouldLock(u.getFailedAttempts()))
-                u.setLockedUntil(LocalDateTime.now().plus(LoginAttemptPolicy.LOCK_DURATION));
-            users.save(u);
-        });
+        if (email != null) {
+            authService.registrarIntentoFallido(email);
+        }
         res.sendRedirect("/auth/login?error");
     }
 }

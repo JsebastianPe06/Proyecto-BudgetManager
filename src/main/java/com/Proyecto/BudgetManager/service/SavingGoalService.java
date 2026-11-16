@@ -5,8 +5,6 @@ import com.Proyecto.BudgetManager.domain.domainMeta.AporteAhorro;
 import com.Proyecto.BudgetManager.domain.domainMeta.AporteValid;
 import com.Proyecto.BudgetManager.domain.domainMeta.MetaAhorro;
 import com.Proyecto.BudgetManager.domain.domainMeta.MetaValid;
-import com.Proyecto.BudgetManager.repository.AporteAhorroRepository;
-import com.Proyecto.BudgetManager.repository.MetaAhorroRepository;
 import java.math.BigDecimal;
 
 public class SavingGoalService {

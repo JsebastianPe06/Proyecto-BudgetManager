@@ -16,7 +16,7 @@ public class UserEntity {
     @Column(nullable = false, unique = true) private String email;
     @Column(nullable = false) private String passwordHash;
     @Column(nullable = false) private String fullName;
-    @Column(nullable = false) private String role; // "USER" | "ADMIN"
+    @Column(nullable = false, length=16) private String role; // "USER" | "ADMIN"
     private LocalDateTime lockedUntil;
-    private int failedAttempts;
+    @Column(nullable = false) private int failedAttempts;
 }

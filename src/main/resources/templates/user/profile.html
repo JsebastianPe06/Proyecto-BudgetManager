@@ -1,6 +1,14 @@
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<p th:if="${param.ok}">Datos actualizados</p>
+
 <form th:action="@{/profile}" th:object="${profile}" method="post">
-  <label>Nombre <input th:field="*{fullName}"/></label>
-  <label>Correo <input th:field="*{email}" type="email"/></label>
+  <label>Nombre
+    <input th:field="*{fullName}"/>
+    <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+  </label>
+  <label>Correo
+    <input th:field="*{email}" type="email"/>
+    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+  </label>
   <button>Guardar</button>
 </form>
-<p th:if="${param.ok}">Datos actualizados</p>

@@ -1,7 +1,6 @@
 package com.Proyecto.BudgetManager.domain.domainMeta;
 import java.math.BigDecimal;
 
-import com.Proyecto.BudgetManager.domain.domainFecha.Fecha;
 
 public class avanceMeta {
 

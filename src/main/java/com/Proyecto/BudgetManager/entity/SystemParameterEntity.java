@@ -1,10 +1,8 @@
 package com.Proyecto.BudgetManager.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
 
 
-@Getter 
 @Entity
 @Table(name = "system_parameters")
 public class SystemParameterEntity {
@@ -12,7 +10,7 @@ public class SystemParameterEntity {
     @Column(name = "param_key")   // "key" es palabra reservada en SQL; usamos param_key
     private String key;
 
-    @Column(name = "param_value", nullable = false)
+    @Column(name = "param_value", nullable = false, columnDefinition = "TEXT")
     private String value;
 
     public SystemParameterEntity() {}

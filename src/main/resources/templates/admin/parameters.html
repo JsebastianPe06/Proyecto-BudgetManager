@@ -3,3 +3,14 @@
   <input name="value" placeholder="COP"/>
   <button>Guardar</button>
 </form>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<p th:if="${param.ok}">Parámetro guardado correctamente</p>
+<form th:action="@{/admin/parameters}" method="post">
+  <input name="key" placeholder="currency.base"/>
+  <input name="value" placeholder="COP"/>
+  <button>Guardar</button>
+</form>
+<select name="key">
+  <option value="currency.base">currency.base</option>
+  <option value="notification.text">notification.text</option>
+</select>

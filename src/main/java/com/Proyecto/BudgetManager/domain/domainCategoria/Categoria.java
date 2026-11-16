@@ -1,6 +1,6 @@
 package com.Proyecto.BudgetManager.domain.domainCategoria;
 
-import com.Proyecto.BudgetManager.enums.TipoCategoria;
+import com.Proyecto.BudgetManager.enums.Category;
 import lombok.Getter;
 
 public class Categoria 
@@ -12,13 +12,13 @@ public class Categoria
     @Getter 
     private String descripcion;
     @Getter 
-    private TipoCategoria tipo; //(gasto/ingrso) 
+    private Category tipo; //(gasto/ingrso) 
     @Getter
     private boolean custom; //false si es preterminado, tru si custom
     @Getter 
     private int ownerId;    //quien hizo la categoria, 0 (cero) si es del sistema/preterminado
 
-    public Categoria(int id, String name, String descripcion, TipoCategoria tipo, boolean custom, int ownerId) {
+    public Categoria(int id, String name, String descripcion, Category tipo, boolean custom, int ownerId) {
         this.id = id;
         this.name = name;
         this.descripcion = descripcion;

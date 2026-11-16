@@ -37,3 +37,7 @@ build/
 ### SQLite ###
 *.db
 backups/
+*.db-journal
+*.db-wal
+*.db-shm
+data

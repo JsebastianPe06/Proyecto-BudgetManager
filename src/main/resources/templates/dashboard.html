@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Dashboard</title></head>
+<body>
+  <h1>Bienvenido</h1>
+  <a th:href="@{/profile}">Mi perfil</a>
+
+  <ul>
+    <li><a th:href="@{/profile}">Mi perfil</a></li>
+    <li><a th:href="@{/transactions}">Mis Transacciones</a></li>
+    <li><a th:href="@{/budget}">Mi Presupuesto</a></li>
+  </ul>
+</body>
+</html>

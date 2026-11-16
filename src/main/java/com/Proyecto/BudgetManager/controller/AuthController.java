@@ -2,6 +2,7 @@ package com.Proyecto.BudgetManager.controller;
 
 import com.Proyecto.BudgetManager.service.AuthService;
 import com.Proyecto.BudgetManager.dto.RegisterRequest;
+import com.Proyecto.BudgetManager.exception.BusinessException;
 
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -31,9 +32,15 @@ public class AuthController {
 
     // Procesa el registro y delega en AuthService
     @PostMapping("/register")
-    public String registerSubmit(@Valid @ModelAttribute("form") RegisterRequest req,BindingResult errors) {
+    public String registerSubmit(@Valid @ModelAttribute("form") RegisterRequest req,
+                                BindingResult errors, Model model) {
         if (errors.hasErrors()) return "auth/register";
-        authService.register(req);
+        try {
+            authService.register(req);
+        } catch (BusinessException e) {
+            model.addAttribute("error", e.getMessage());
+            return "auth/register";
+        }
         return "redirect:/auth/login?registered";
     }
 }

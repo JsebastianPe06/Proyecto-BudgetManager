@@ -10,4 +10,10 @@ public class GlobalExceptionHandler {
         m.addAttribute("error", ex.getMessage());
         return "error/business"; //templates/error/business.html
     }
+
+    @ExceptionHandler(Exception.class)
+    public String handleGeneric(Exception ex, Model m) {
+        m.addAttribute("error", "Ha ocurrido un error inesperado");
+        return "error/business";
+}
 }

@@ -20,12 +20,16 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfile(String currentEmail, UserProfileDTO dto) {
-        UserEntity u = users.findByEmail(currentEmail).orElseThrow();
-        if (!dto.email().equals(currentEmail) && users.existsByEmail(dto.email()))
+    public boolean updateProfile(String currentEmail, UserProfileDTO dto) {
+        UserEntity u = users.findByEmail(currentEmail).orElseThrow(() -> new BusinessException("Usuario no encontrado"));
+        String newEmail = dto.email().trim().toLowerCase();
+        boolean emailChanged = !newEmail.equals(currentEmail);
+        if (emailChanged && users.existsByEmail(dto.email())) {
             throw new BusinessException("Ese correo ya está en uso");
+        }
         u.setFullName(dto.fullName());
         u.setEmail(dto.email());
         users.save(u);
+        return emailChanged; // el controlador decide si re-loguear
     }
 }

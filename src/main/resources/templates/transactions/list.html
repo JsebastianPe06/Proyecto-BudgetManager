@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Mis Transacciones</title></head>
+<body>
+  <h1>Mis Transacciones</h1>
+
+  <!-- Si hay un error, lo mostramos aquí -->
+  <p th:if="${error}" th:text="${error}" style="color: red; font-weight: bold;"></p>
+
+  <p th:if="${param.ok}" style="color: green;">Transacción registrada correctamente.</p>
+  <p th:if="${param.warning != null and param.warning[0] == 'riesgo'}" style="color: orange;">
+    ¡Advertencia! Saldo por debajo del 10%.
+  </p>
+  
+  <h3 th:text="'Saldo actual: $' + (${saldo != null} ? ${saldo} : '0.00')">Saldo</h3>
+
+  <a th:href="@{/transactions/new}">Registrar nueva transacción</a> |
+  <a th:href="@{/dashboard}">Volver al Dashboard</a>
+
+  <table border="1" style="margin-top: 20px; width: 100%;">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Categoría</th>
+        <th>Monto</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Recorremos la lista si no es nula -->
+      <tr th:each="tx : ${transactions}" th:if="${transactions != null}">
+        <td th:text="${tx.transactionDate}">-</td>
+        <td th:text="${tx.type}">-</td>
+        <td th:text="${tx.category}">-</td>
+        <td th:text="${tx.amount}">-</td>
+        <td th:text="${tx.planned} ? 'Planificado' : 'Realizado'">-</td>
+      </tr>
+      
+      <!-- Si está vacía o nula -->
+      <tr th:if="${transactions == null or #lists.isEmpty(transactions)}">
+        <td colspan="5" style="text-align: center; color: gray;">No hay transacciones registradas.</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

@@ -1,6 +1,6 @@
 package com.Proyecto.BudgetManager.domain.domainCategoria;
 
-import com.Proyecto.BudgetManager.enums.TipoCategoria;
+import com.Proyecto.BudgetManager.enums.TransactionType;
 import com.Proyecto.BudgetManager.enums.TipoMovimiento;
 
 
@@ -36,20 +36,21 @@ public class CategoriaValid {
             throw new IllegalArgumentException("El tipo de movimiento es obligatorio");
         }
         
-        TipoCategoria tipoEsperado;
+        TransactionType tipoEsperado;
         
         if (tipoMove == TipoMovimiento.INGRESO) 
         {
-            tipoEsperado = TipoCategoria.INGRESO;
+            tipoEsperado = TransactionType.INGRESO;
         } 
         else 
         {
-            tipoEsperado = TipoCategoria.GASTO;
+            tipoEsperado = TransactionType.GASTO;
         }
-
+        /*
         if (categoria.getTipo() != tipoEsperado) 
         { 
             throw new IllegalArgumentException("La categoría no corresponde al tipo de movimiento");
         }
+        */
     }
 }

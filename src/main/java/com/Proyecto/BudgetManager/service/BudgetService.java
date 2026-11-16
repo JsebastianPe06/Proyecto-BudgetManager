@@ -1,235 +1,94 @@
 package com.Proyecto.BudgetManager.service;
 
-import com.Proyecto.BudgetManager.domain.domainBudget.Budget;
-import com.Proyecto.BudgetManager.domain.domainBudget.BudgetCategoria;
-import com.Proyecto.BudgetManager.domain.domainBudget.BudgetValid;
-import com.Proyecto.BudgetManager.domain.domainCategoria.Categoria;
-import com.Proyecto.BudgetManager.domain.domainFecha.Fecha;
-import com.Proyecto.BudgetManager.domain.domainMeta.EstadoPresupuesto;
-import com.Proyecto.BudgetManager.dto.BudgetForm;
-import com.Proyecto.BudgetManager.dto.BudgetResumenDTO;
-import com.Proyecto.BudgetManager.dto.CategoriaEstadoDTO;
-import com.Proyecto.BudgetManager.dto.LimiteCategoriaForm;
-import com.Proyecto.BudgetManager.enums.BudgetEstado;
+import com.Proyecto.BudgetManager.domain.domainBudget.EstadoDeCategoria;
+import com.Proyecto.BudgetManager.dto.BudgetRequest;
+import com.Proyecto.BudgetManager.dto.CategoryLimitRequest;
+import com.Proyecto.BudgetManager.entity.BudgetEntity;
+import com.Proyecto.BudgetManager.entity.CategoryLimitEntity;
+import com.Proyecto.BudgetManager.entity.UserEntity;
+import com.Proyecto.BudgetManager.enums.Category;
+import com.Proyecto.BudgetManager.exception.BusinessException;
+import com.Proyecto.BudgetManager.repository.BudgetRepository;
+import com.Proyecto.BudgetManager.repository.TransactionRepository;
+import com.Proyecto.BudgetManager.repository.UserRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.YearMonth;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * Presupuesto por periodo y límites por categoría (US-03, FR-09).
- *
- * Solo orquesta: arma los objetos, llama a las reglas puras del dominio
- * (BudgetValid, EstadoPresupuesto) y devuelve DTOs para la vista.
- *
- * Los métodos marcados "TODO capa de datos" dependen de los repositorios
- * que va a implementar la capa de datos (JPA). Mientras tanto lanzan
- * UnsupportedOperationException, igual que los repositorios actuales.
- */
-// @Service
+@Service
 public class BudgetService {
-    BudgetValid budgetValid = new BudgetValid();
-    EstadoPresupuesto estadoPresupuesto = new EstadoPresupuesto();
-    // ------------------------------------------------------------------
-    // Crear y configurar
-    // ------------------------------------------------------------------
+    private final BudgetRepository budgets;
+    private final UserRepository users;
+    private final TransactionRepository transactions;
 
-    /** Crea un presupuesto para un periodo (US-03). */
-    public void crearBudget(int userId, BudgetForm form)
-    {
-        if (form == null)
-        {
-            throw new IllegalArgumentException("Los datos del presupuesto son obligatorios");
+    public BudgetService(BudgetRepository budgets, UserRepository users, TransactionRepository transactions) {
+        this.budgets = budgets;
+        this.users = users;
+        this.transactions = transactions;
+    }
+
+    @Transactional
+    public void createBudget(String email, BudgetRequest req) {
+        if (budgets.findByUserEmailAndMonthAndYear(email, req.month(), req.year()).isPresent()) {
+            throw new BusinessException("Ya existe un presupuesto para este mes y año");
         }
 
-        Budget budget = new Budget(0, userId, form.getTotalLimite(),
-                aFecha(form.getFechaInicio()), aFecha(form.getFechaFinal()), BudgetEstado.NORMAL);
-
-        budgetValid.validar(budget);
-
-        // BudgetRepository.guardar(budget);   TODO capa de datos
+        UserEntity user = users.findByEmail(email).orElseThrow();
+        BudgetEntity budget = new BudgetEntity();
+        budget.setUser(user);
+        budget.setMonth(req.month());
+        budget.setYear(req.year());
+        budget.setTotalAmount(req.totalAmount());
+        
+        budgets.save(budget);
     }
 
-    /** Asigna un límite a una categoría dentro de un presupuesto (US-03, escenario 2). */
-    public void asignarLimiteCategoria(int userId, LimiteCategoriaForm form)
-    {
-        if (form == null || form.getBudgetId() == null || form.getCategoriaId() == null)
-        {
-            throw new IllegalArgumentException("El presupuesto y la categoría son obligatorios");
+    public BudgetEntity getBudget(String email, int month, int year) {
+        return budgets.findByUserEmailAndMonthAndYear(email, month, year).orElse(null);
+    }
+
+    // Calcula el estado de cada categoría comparando el límite con lo gastado en el mes
+    public Map<Category, EstadoDeCategoria> getCategoryStatus(String email, int month, int year) {
+        BudgetEntity budget = getBudget(email, month, year);
+        if (budget == null) return new HashMap<>();
+
+        Map<Category, EstadoDeCategoria> estados = new HashMap<>();
+        
+        // Rango de fechas del mes (como String para SQLite)
+        YearMonth ym = YearMonth.of(year, month);
+        String startDate = ym.atDay(1).toString();
+        String endDate = ym.atEndOfMonth().toString();
+
+        for (CategoryLimitEntity limit : budget.getCategoryLimits()) {
+            BigDecimal gastado = transactions.sumAmountByUserAndCategoryAndDateRange(
+                    email, limit.getCategory(), startDate, endDate);
+            if (gastado == null) gastado = BigDecimal.ZERO;
+            
+            estados.put(limit.getCategory(), EstadoDeCategoria.evaluar(limit.getLimitAmount(), gastado));
         }
-
-        Budget budget = buscarBudgetDelUsuario(userId, form.getBudgetId());
-
-        BudgetCategoria nuevo = new BudgetCategoria(0, budget.getId(), form.getCategoriaId(),
-                form.getLimite(), BudgetEstado.NORMAL);
-
-        List<BudgetCategoria> existentes = buscarLimitesDelBudget(budget.getId());
-
-        budgetValid.validarLimiteCategoria(nuevo, budget, existentes);
-
-        // BudgetCategoriaRepository.guardar(nuevo);   TODO capa de datos
+        return estados;
     }
 
-    // ------------------------------------------------------------------
-    // Evaluar
-    // ------------------------------------------------------------------
-
-    /** Estado general del presupuesto: todo lo gastado en el periodo contra el límite total. */
-    public BudgetEstado evaluarBudgetGeneral(int userId, int budgetId)
-    {
-        Budget budget = buscarBudgetDelUsuario(userId, budgetId);
-        BigDecimal gastado = sumarGastosPeriodo(userId,
-                aLocalDate(budget.getFechaInicio()), aLocalDate(budget.getFechaFinal()));
-
-        return estadoPresupuesto.calcularEstado(gastado, budget.getTotalLimite());
-    }
-
-    /** Estado de una categoría dentro del presupuesto. */
-    public CategoriaEstadoDTO evaluarBudgetCategoria(int userId, int budgetId, int categoriaId)
-    {
-        Budget budget = buscarBudgetDelUsuario(userId, budgetId);
-
-        for (BudgetCategoria limite : buscarLimitesDelBudget(budgetId))
-        {
-            if (limite.getCategoriaId() == categoriaId)
-            {
-                return armarEstadoCategoria(userId, budget, limite);
-            }
+    @Transactional
+    public void addCategoryLimit(String email, int month, int year, CategoryLimitRequest req) {
+        BudgetEntity budget = budgets.findByUserEmailAndMonthAndYear(email, month, year)
+                .orElseThrow(() -> new BusinessException("Primero debes crear el presupuesto del mes"));
+        // Verificar si la categoría ya tiene un límite
+        boolean exists = budget.getCategoryLimits().stream()
+                .anyMatch(l -> l.getCategory() == req.category());
+        if (exists) {
+            throw new BusinessException("Ya existe un límite para esta categoría");
         }
-        throw new IllegalArgumentException("Esta categoría no tiene límite en este presupuesto");
-    }
-
-    /**
-     * Impacto de un gasto antes de registrarlo: en qué estado quedaría la categoría.
-     * Lo puede consultar TransactionService al registrar un gasto (sección 3.2 del documento).
-     * Si la categoría no tiene límite en el presupuesto, devuelve null (no hay nada que evaluar).
-     */
-    public BudgetEstado evaluarImpactoGasto(int userId, int budgetId, int categoriaId, BigDecimal monto)
-    {
-        Budget budget = buscarBudgetDelUsuario(userId, budgetId);
-
-        for (BudgetCategoria limite : buscarLimitesDelBudget(budgetId))
-        {
-            if (limite.getCategoriaId() == categoriaId)
-            {
-                BigDecimal gastado = sumarGastosCategoria(userId, categoriaId,
-                        aLocalDate(budget.getFechaInicio()), aLocalDate(budget.getFechaFinal()));
-                return estadoPresupuesto.estadoConGasto(gastado, limite.getLimite(), monto);
-            }
-        }
-        return null;
-    }
-
-    /** Resumen completo: total del periodo y estado de cada categoría con límite. */
-    public BudgetResumenDTO getBudgetResumen(int userId, int budgetId)
-    {
-        Budget budget = buscarBudgetDelUsuario(userId, budgetId);
-        LocalDate desde = aLocalDate(budget.getFechaInicio());
-        LocalDate hasta = aLocalDate(budget.getFechaFinal());
-
-        BigDecimal gastado = sumarGastosPeriodo(userId, desde, hasta);
-        BigDecimal limite = budget.getTotalLimite();
-
-        List<CategoriaEstadoDTO> categorias = new ArrayList<>();
-        for (BudgetCategoria limiteCategoria : buscarLimitesDelBudget(budgetId))
-        {
-            categorias.add(armarEstadoCategoria(userId, budget, limiteCategoria));
-        }
-
-        return new BudgetResumenDTO(
-                budget.getId(), desde, hasta,
-                limite,
-                gastado,
-                estadoPresupuesto.disponible(gastado, limite),
-                estadoPresupuesto.porcentajeUsado(gastado, limite),
-                estadoPresupuesto.calcularEstado(gastado, limite),
-                categorias);
-    }
-
-    // ------------------------------------------------------------------
-    // Ayudantes
-    // ------------------------------------------------------------------
-
-    private CategoriaEstadoDTO armarEstadoCategoria(int userId, Budget budget, BudgetCategoria limiteCategoria)
-    {
-        BigDecimal limite = limiteCategoria.getLimite();
-        BigDecimal gastado = sumarGastosCategoria(userId, limiteCategoria.getCategoriaId(),
-                aLocalDate(budget.getFechaInicio()), aLocalDate(budget.getFechaFinal()));
-        Categoria categoria = buscarCategoria(limiteCategoria.getCategoriaId());
-
-        return new CategoriaEstadoDTO(
-                limiteCategoria.getCategoriaId(),
-                categoria.getName(),
-                limite,
-                gastado,
-                estadoPresupuesto.disponible(gastado, limite),
-                estadoPresupuesto.porcentajeUsado(gastado, limite),
-                estadoPresupuesto.calcularEstado(gastado, limite));
-    }
-
-    /** Busca el presupuesto y verifica que sea del usuario (nadie ve presupuestos ajenos). */
-    private Budget buscarBudgetDelUsuario(int userId, int budgetId)
-    {
-        Budget budget = buscarBudget(budgetId);
-        if (budget == null)
-        {
-            throw new IllegalArgumentException("El presupuesto no existe");
-        }
-        if (budget.getUserId() != userId)
-        {
-            throw new IllegalArgumentException("No puedes ver ni modificar este presupuesto");
-        }
-        return budget;
-    }
-
-    /** Convierte la fecha del formulario (LocalDate) a la clase fecha del equipo. */
-    private static Fecha aFecha(LocalDate date)
-    {
-        if (date == null)
-        {
-            return null;
-        }
-        return new Fecha(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-    }
-
-    /** Convierte la clase fecha del equipo a LocalDate (para DTOs y consultas). */
-    private static LocalDate aLocalDate(Fecha date)
-    {
-        if (date == null)
-        {
-            return null;
-        }
-        return LocalDate.of(date.getYear(), date.getMes(), date.getDia());
-    }
-
-    // ------------------------------------------------------------------
-    // TODO capa de datos: reemplazar por llamadas a los repositorios JPA
-    // ------------------------------------------------------------------
-
-    private Budget buscarBudget(int budgetId)
-    {
-        throw new UnsupportedOperationException("Falta BudgetRepository (capa de datos)");
-    }
-
-    private List<BudgetCategoria> buscarLimitesDelBudget(int budgetId)
-    {
-        throw new UnsupportedOperationException("Falta BudgetCategoriaRepository (capa de datos)");
-    }
-
-    private Categoria buscarCategoria(int categoriaId)
-    {
-        throw new UnsupportedOperationException("Falta CategoriaRepository (capa de datos)");
-    }
-
-    /** Suma de todos los GASTOS del usuario entre dos fechas (incluidas). */
-    private BigDecimal sumarGastosPeriodo(int userId, LocalDate desde, LocalDate hasta)
-    {
-        throw new UnsupportedOperationException("Falta MovimientoRepository.sumarGastos (capa de datos)");
-    }
-
-    /** Suma de los GASTOS del usuario en una categoría entre dos fechas (incluidas). */
-    private BigDecimal sumarGastosCategoria(int userId, int categoriaId, LocalDate desde, LocalDate hasta)
-    {
-        throw new UnsupportedOperationException("Falta MovimientoRepository.sumarGastos (capa de datos)");
+        CategoryLimitEntity limit = new CategoryLimitEntity();
+        limit.setBudget(budget);
+        limit.setCategory(req.category());
+        limit.setLimitAmount(req.limitAmount());
+        budget.getCategoryLimits().add(limit);
+        budgets.save(budget); // Guarda el límite en cascada
     }
 }
