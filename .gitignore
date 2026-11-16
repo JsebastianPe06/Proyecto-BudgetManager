@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### SQLite y Respaldos ###
+data/*.db
+data/*.db-wal
+data/*.db-shm
+backups/
