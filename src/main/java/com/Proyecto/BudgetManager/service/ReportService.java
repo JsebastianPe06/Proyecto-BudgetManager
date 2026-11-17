@@ -5,7 +5,7 @@ import com.Proyecto.BudgetManager.dto.MonthlyReport;
 import com.Proyecto.BudgetManager.entity.TransactionEntity;
 import com.Proyecto.BudgetManager.enums.TransactionType;
 import com.Proyecto.BudgetManager.repository.TransactionRepository;
-import com.Proyecto.BudgetManager.repository.SavingsTransactionRepository; // NUEVO
+import com.Proyecto.BudgetManager.repository.SavingsTransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class ReportService {
     private final TransactionRepository transactions;
-    private final SavingsTransactionRepository savingsTransactions; // CAMBIO
+    private final SavingsTransactionRepository savingsTransactions;
 
     public ReportService(TransactionRepository transactions, SavingsTransactionRepository savingsTransactions) {
         this.transactions = transactions;

@@ -2,19 +2,17 @@ package com.Proyecto.BudgetManager.service;
 
 import com.Proyecto.BudgetManager.domain.domainTransaction.GeneradorDeRecurrentes;
 import com.Proyecto.BudgetManager.entity.TransactionEntity;
-import com.Proyecto.BudgetManager.entity.UserEntity;
 import com.Proyecto.BudgetManager.enums.TransactionType;
 import com.Proyecto.BudgetManager.repository.TransactionRepository;
 import com.Proyecto.BudgetManager.repository.UserRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

@@ -3,11 +3,11 @@ package com.Proyecto.BudgetManager.service;
 import com.Proyecto.BudgetManager.domain.domainMeta.AvanceDeMeta;
 import com.Proyecto.BudgetManager.dto.SavingsGoalRequest;
 import com.Proyecto.BudgetManager.entity.SavingsGoalEntity;
-import com.Proyecto.BudgetManager.entity.SavingsTransactionEntity; // NUEVO
+import com.Proyecto.BudgetManager.entity.SavingsTransactionEntity;
 import com.Proyecto.BudgetManager.entity.UserEntity;
 import com.Proyecto.BudgetManager.exception.BusinessException;
 import com.Proyecto.BudgetManager.repository.SavingsGoalRepository;
-import com.Proyecto.BudgetManager.repository.SavingsTransactionRepository; // NUEVO
+import com.Proyecto.BudgetManager.repository.SavingsTransactionRepository;
 import com.Proyecto.BudgetManager.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +20,7 @@ import java.util.List;
 public class SavingsGoalService {
     private final SavingsGoalRepository goals;
     private final UserRepository users;
-    private final SavingsTransactionRepository savingsTransactions; // NUEVO
+    private final SavingsTransactionRepository savingsTransactions;
 
     public SavingsGoalService(SavingsGoalRepository goals, UserRepository users, SavingsTransactionRepository savingsTransactions) {
         this.goals = goals;

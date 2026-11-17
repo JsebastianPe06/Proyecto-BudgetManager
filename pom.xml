@@ -62,7 +62,7 @@
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <scope>runtime</scope>
+            <scope>3.45.1.0</scope>
         </dependency>
 
         <!-- Dialecto SQLite para Hibernate -->

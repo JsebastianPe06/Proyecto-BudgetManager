@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 2. Sidebar Toggle (Móvil) ---
+    // --- 2. Sidebar Toggle ---
     const menuToggle = document.getElementById('menuToggle');
     const sidebar = document.getElementById('sidebar');
     const backdrop = document.getElementById('sidebarBackdrop');

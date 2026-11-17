@@ -34,19 +34,14 @@ public class TransactionService {
     public ImpactoDeGasto registrar(String email, TransactionEntity nueva) {
         UserEntity user = users.findByEmail(email)
                 .orElseThrow(() -> new BusinessException("Usuario no encontrado"));
-
         if (nueva.getAmount() == null || nueva.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException("El monto debe ser mayor que cero");
         }
-
         nueva.setUser(user);
-
         if (nueva.getTransactionDate() == null || nueva.getTransactionDate().isBlank()) {
             nueva.setTransactionDate(java.time.LocalDate.now().toString());
         }
-
         ImpactoDeGasto impacto = null;
-
         if (nueva.getType() == TransactionType.GASTO && !nueva.isPlanned()) {
             BigDecimal saldo = calcularSaldoActual(email);
             impacto = ImpactoDeGasto.evaluar(saldo, nueva.getAmount());
@@ -55,7 +50,6 @@ public class TransactionService {
                         "Saldo insuficiente. Disponible: " + saldo + ", gasto solicitado: " + nueva.getAmount());
             }
         }
-
         transactions.save(nueva);
         return impacto;
     }

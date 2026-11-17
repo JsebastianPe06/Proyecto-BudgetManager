@@ -30,8 +30,8 @@
                             <div class="flex justify-between" style="font-size: 0.875rem; margin-bottom: 0.25rem;">
                                 <span style="font-weight: 500;" th:text="${entry.key}"></span>
                                 <span class="badge" 
-                                      th:classappend="${entry.value.estado.toString() == 'SEGURO' ? 'badge-success' : (entry.value.estado.toString() == 'EN_RIESGO' ? 'badge-warning' : 'badge-danger')}"
-                                      th:text="${entry.value.estado}"></span>
+                                    th:classappend="${entry.value.estado.toString() == 'SEGURO' ? 'badge-success' : (entry.value.estado.toString() == 'EN_RIESGO' ? 'badge-warning' : 'badge-danger')}"
+                                    th:text="${entry.value.estado}"></span>
                             </div>
                             <div class="progress">
                                 <div class="progress-bar" 

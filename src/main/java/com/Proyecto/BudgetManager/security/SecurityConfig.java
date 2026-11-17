@@ -12,7 +12,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12); // costo ≥ 12 exigido por NFR-01
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean
@@ -26,20 +26,19 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/auth/login")             // A dónde va el usuario si no está logueado
-                .loginProcessingUrl("/login")         // A DÓNDE SE ENVÍA EL FORMULARIO (POST)
-                .successHandler(success)              // Tu manejador de éxito
-                .failureHandler(failure)              // Tu manejador de error
+                .loginPage("/auth/login")
+                .loginProcessingUrl("/login")
+                .successHandler(success)
+                .failureHandler(failure)
                 .permitAll()
             )
             .logout(logout -> logout
-                .logoutUrl("/logout")                 // URL para cerrar sesión
+                .logoutUrl("/logout") // URL para cerrar sesión
                 .logoutSuccessUrl("/auth/login?logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
             );
-
         return http.build();
     }
 }

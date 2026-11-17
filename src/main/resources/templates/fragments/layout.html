@@ -44,7 +44,7 @@
         </nav>
     </aside>
     
-    <!-- Backdrop para móvil -->
+    <!-- Backdrop -->
     <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
     <!-- Contenido Principal -->
@@ -64,7 +64,6 @@
 
         <div class="content-area">
             <h1 th:if="${title != null}" th:text="${title}" style="margin-bottom: 1.5rem;"></h1>
-            <!-- AQUI VA EL CONTENIDO DE LA PAGINA -->
             <div th:replace="${content}"></div>
         </div>
     </main>

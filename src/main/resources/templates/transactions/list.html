@@ -36,8 +36,8 @@
                                 <td th:text="${tx.transactionDate}"></td>
                                 <td>
                                     <span class="badge" 
-                                          th:classappend="${tx.type.toString() == 'INGRESO' ? 'badge-success' : 'badge-info'}"
-                                          th:text="${tx.type}"></span>
+                                        th:classappend="${tx.type.toString() == 'INGRESO' ? 'badge-success' : 'badge-info'}"
+                                        th:text="${tx.type}"></span>
                                 </td>
                                 <td th:text="${tx.category}"></td>
                                 <td style="font-weight: 600;" 

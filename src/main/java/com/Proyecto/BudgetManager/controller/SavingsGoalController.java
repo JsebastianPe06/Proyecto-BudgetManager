@@ -1,7 +1,6 @@
 package com.Proyecto.BudgetManager.controller;
 
 import com.Proyecto.BudgetManager.dto.SavingsGoalRequest;
-import com.Proyecto.BudgetManager.entity.SavingsGoalEntity;
 import com.Proyecto.BudgetManager.exception.BusinessException;
 import com.Proyecto.BudgetManager.service.SavingsGoalService;
 import jakarta.validation.Valid;
