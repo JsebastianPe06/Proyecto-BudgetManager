@@ -1,14 +1,54 @@
-<p th:if="${error}" th:text="${error}" style="color:red"></p>
-<p th:if="${param.ok}">Datos actualizados</p>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mi Perfil')}"></head>
+<body>
+    <div th:replace="~{fragments/layout :: layout('Mi Perfil', ~{::main-content})}">
+        <main-content>
+            <div class="card" style="max-width: 600px;">
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                <div th:if="${param.ok}" class="alert alert-success">Datos actualizados correctamente.</div>
 
-<form th:action="@{/profile}" th:object="${profile}" method="post">
-  <label>Nombre
-    <input th:field="*{fullName}"/>
-    <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
-  </label>
-  <label>Correo
-    <input th:field="*{email}" type="email"/>
-    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-  </label>
-  <button>Guardar</button>
-</form>
+                <form th:action="@{/profile}" th:object="${profile}" method="post">
+                    <input th:replace="~{fragments/layout :: csrf}"/>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" th:field="*{fullName}" class="form-control">
+                        <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="form-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" th:field="*{email}" class="form-control">
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="form-error"></span>
+                    </div>
+
+                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 2rem 0;">
+                    
+                    <h3 style="margin-bottom: 0.5rem;">Seguridad</h3>
+                    <p class="text-muted mb-4" style="font-size: 0.875rem;">Para guardar cualquier cambio, debes ingresar tu contraseña actual.</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Contraseña Actual (Obligatoria)</label>
+                        <input type="password" th:field="*{currentPassword}" class="form-control" required>
+                        <span th:if="${#fields.hasErrors('currentPassword')}" th:errors="*{currentPassword}" class="form-error"></span>
+                    </div>
+                    
+                    <p class="text-muted mt-4 mb-4" style="font-size: 0.875rem;">Opcional: Llena estos campos solo si deseas cambiar tu contraseña.</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Nueva Contraseña</label>
+                        <input type="password" th:field="*{newPassword}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirmar Nueva Contraseña</label>
+                        <input type="password" th:field="*{confirmNewPassword}" class="form-control">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-4">Guardar Cambios</button>
+                </form>
+            </div>
+        </main-content>
+    </div>
+</body>
+</html>

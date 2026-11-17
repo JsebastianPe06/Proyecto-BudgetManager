@@ -1,47 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Mis Transacciones</title></head>
+<head th:replace="~{fragments/layout :: head('Mis Transacciones')}"></head>
 <body>
-  <h1>Mis Transacciones</h1>
+    <div th:replace="~{fragments/layout :: layout('Mis Transacciones', ~{::main-content})}">
+        <main-content>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            <div th:if="${param.ok}" class="alert alert-success">Transacción registrada correctamente.</div>
+            <div th:if="${param.warning != null and param.warning[0] == 'riesgo'}" class="alert alert-warning">
+                ¡Advertencia! Tu saldo ha quedado por debajo del 10%.
+            </div>
 
-  <!-- Si hay un error, lo mostramos aquí -->
-  <p th:if="${error}" th:text="${error}" style="color: red; font-weight: bold;"></p>
+            <div class="flex justify-between items-center mb-4">
+                <div class="kpi-card" style="padding: 1rem 1.5rem; border-left: 4px solid var(--color-primary);">
+                    <span class="kpi-label">Saldo Actual</span>
+                    <div class="kpi-value" style="font-size: 1.5rem;" th:text="'$' + (${saldo != null} ? ${saldo} : '0.00')"></div>
+                </div>
+                <a th:href="@{/transactions/new}" class="btn btn-primary">+ Nueva Transacción</a>
+            </div>
 
-  <p th:if="${param.ok}" style="color: green;">Transacción registrada correctamente.</p>
-  <p th:if="${param.warning != null and param.warning[0] == 'riesgo'}" style="color: orange;">
-    ¡Advertencia! Saldo por debajo del 10%.
-  </p>
-  
-  <h3 th:text="'Saldo actual: $' + (${saldo != null} ? ${saldo} : '0.00')">Saldo</h3>
-
-  <a th:href="@{/transactions/new}">Registrar nueva transacción</a> |
-  <a th:href="@{/dashboard}">Volver al Dashboard</a>
-
-  <table border="1" style="margin-top: 20px; width: 100%;">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Tipo</th>
-        <th>Categoría</th>
-        <th>Monto</th>
-        <th>Estado</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Recorremos la lista si no es nula -->
-      <tr th:each="tx : ${transactions}" th:if="${transactions != null}">
-        <td th:text="${tx.transactionDate}">-</td>
-        <td th:text="${tx.type}">-</td>
-        <td th:text="${tx.category}">-</td>
-        <td th:text="${tx.amount}">-</td>
-        <td th:text="${tx.planned} ? 'Planificado' : 'Realizado'">-</td>
-      </tr>
-      
-      <!-- Si está vacía o nula -->
-      <tr th:if="${transactions == null or #lists.isEmpty(transactions)}">
-        <td colspan="5" style="text-align: center; color: gray;">No hay transacciones registradas.</td>
-      </tr>
-    </tbody>
-  </table>
+            <div class="card" style="padding: 0;">
+                <div class="table-wrapper" style="border: none;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Categoría</th>
+                                <th>Monto</th>
+                                <th>Estado</th>
+                                <th>Reflexión</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="tx : ${transactions}" th:if="${transactions != null}">
+                                <td th:text="${tx.transactionDate}"></td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${tx.type.toString() == 'INGRESO' ? 'badge-success' : 'badge-info'}"
+                                          th:text="${tx.type}"></span>
+                                </td>
+                                <td th:text="${tx.category}"></td>
+                                <td style="font-weight: 600;" 
+                                    th:classappend="${tx.type.toString() == 'INGRESO' ? 'text-success' : 'text-danger'}"
+                                    th:text="'$' + ${tx.amount}"></td>
+                                <td>
+                                    <span th:if="${tx.planned}" class="badge badge-warning">Planificado</span>
+                                    <span th:if="${!tx.planned}" class="badge badge-success">Realizado</span>
+                                </td>
+                                <td>
+                                    <details th:if="${tx.reflectionNote != null && !tx.reflectionNote.isEmpty()}">
+                                        <summary style="cursor: pointer; font-size: 0.75rem; color: var(--color-primary);">Ver nota</summary>
+                                        <p style="font-size: 0.75rem; margin-top: 0.5rem; color: var(--text-muted);" th:text="${tx.reflectionNote}"></p>
+                                    </details>
+                                    <span th:if="${tx.reflectionNote == null || tx.reflectionNote.isEmpty()}" class="text-muted" style="font-size: 0.75rem;">-</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${transactions == null or #lists.isEmpty(transactions)}">
+                                <td colspan="6" class="text-center text-muted" style="padding: 2rem;">No hay transacciones registradas.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main-content>
+    </div>
 </body>
 </html>

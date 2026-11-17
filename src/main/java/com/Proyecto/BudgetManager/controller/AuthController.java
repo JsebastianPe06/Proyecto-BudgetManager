@@ -26,7 +26,7 @@ public class AuthController {
     // Muestra el formulario de registro vacío
     @GetMapping("/register")
     public String registerForm(Model model) {
-        model.addAttribute("form", new RegisterRequest("", "", ""));
+        model.addAttribute("form", new RegisterRequest("", "", "", ""));
         return "auth/register";
     }
 
@@ -35,6 +35,10 @@ public class AuthController {
     public String registerSubmit(@Valid @ModelAttribute("form") RegisterRequest req,
                                 BindingResult errors, Model model) {
         if (errors.hasErrors()) return "auth/register";
+        if (!req.password().equals(req.confirmPassword())) {
+            model.addAttribute("error", "Las contraseñas no coinciden");
+            return "auth/register";
+        }
         try {
             authService.register(req);
         } catch (BusinessException e) {

@@ -36,13 +36,17 @@ El proyecto está diseñado bajo un estilo de **Monolito Clásico en Tres Capas*
 
 ---
 
-## Vista de desarrollo
+## ¿Cómo ejecutar el proyecto?
 
-<img width="1580" height="941" alt="digrama uml" src="https://github.com/user-attachments/assets/2ebc6462-b847-4398-8ef2-6d18d36b3f72" />  
+### Windows
+1. Haz doble clic en el archivo `run.bat` (o ejecútalo desde la terminal).
+2. Abre tu navegador en: `http://localhost:8080`.
 
+### Mac / Linux
+1. Abre una terminal en la carpeta del proyecto.
+2. Ejecuta: `./run.sh` (la primera vez quizás necesites ejecutar `chmod +x run.sh`).
+3. Abre tu navegador en: `http://localhost:8080`.
 
----
-
-## Vista de despliegue
-
-<img width="1270" height="861" alt="Diagrama en blanco" src="https://github.com/user-attachments/assets/5d66179d-73b4-4261-886d-4462d5bc0cce" />
+## Usuarios de prueba
+- **Admin**: `admin@unal.edu.co` / `Admin1234`
+- O crea tu propio usuario en la pantalla de registro.

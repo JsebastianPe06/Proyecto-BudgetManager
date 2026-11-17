@@ -28,12 +28,11 @@ public class UserController {
 
     @PostMapping
     public String update(@Valid @ModelAttribute("profile") UserProfileDTO dto,
-            BindingResult errors,Authentication auth,Model model, HttpServletRequest request)
-            throws ServletException
-            {
-                if (errors.hasErrors()) return "user/profile";
-            try {
-                boolean emailChanged = userService.updateProfile(auth.getName(), dto);
+            BindingResult errors, Authentication auth, Model model, HttpServletRequest request)
+            throws ServletException {
+        if (errors.hasErrors()) return "user/profile";
+        try {
+            boolean emailChanged = userService.updateProfile(auth.getName(), dto);
             if (emailChanged) {
                 request.logout();
                 return "redirect:/auth/login?emailChanged";

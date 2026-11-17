@@ -12,45 +12,35 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "transactions")
 public class TransactionEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TransactionType type;   // INGRESO | GASTO
-
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;      // NECESIDADES | OCIO | CULTURA | EXTRAS
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Priority priority;      // ALTA | MEDIA | BAJA
-
     @Column(nullable = false)
     private String transactionDate;
-
     @Column(nullable = false)
     private boolean planned;        // true = gasto planificado (aún no realizado)
-
     @Column(nullable = false)
     private boolean recurrent;      // true = se repite cada mes
-
     private Integer recurrentDay;   // día del mes (1-31) si es recurrente
-
     @Column(nullable = false, updatable = false)
     private String createdAt;
-
-    // --- Constructores ---
+    private boolean satisfied = true; // Por defecto, asumimos que fue consciente
+    @Column(columnDefinition = "TEXT")
+    private String reflectionNote;
 
     public TransactionEntity() {}
 
@@ -92,4 +82,10 @@ public class TransactionEntity {
     public void setRecurrentDay(Integer recurrentDay) { this.recurrentDay = recurrentDay; }
 
     public String getCreatedAt() { return createdAt; }
+
+    public boolean isSatisfied() { return satisfied; }
+    public void setSatisfied(boolean satisfied) { this.satisfied = satisfied; }
+    
+    public String getReflectionNote() { return reflectionNote; }
+    public void setReflectionNote(String reflectionNote) { this.reflectionNote = reflectionNote; }
 }

@@ -41,3 +41,5 @@ backups/
 *.db-wal
 *.db-shm
 data
+
+backups/

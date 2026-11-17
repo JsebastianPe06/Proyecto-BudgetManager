@@ -47,7 +47,8 @@ public class TransactionController {
     @GetMapping("/new")
     public String showForm(Model model) {
         model.addAttribute("form", new TransactionRequest(
-                TransactionType.GASTO, null, Category.NECESIDADES, Priority.MEDIA, LocalDate.now(), false, false, null
+                TransactionType.GASTO, null, Category.NECESIDADES, Priority.MEDIA, LocalDate.now(), false,
+                false, null, null, null
         ));
         model.addAttribute("types", TransactionType.values());
         model.addAttribute("categories", Category.values());
@@ -64,7 +65,6 @@ public class TransactionController {
             model.addAttribute("priorities", Priority.values());
             return "transactions/form";
         }
-
         try {
             TransactionEntity entity = new TransactionEntity();
             entity.setType(req.type());
@@ -75,14 +75,13 @@ public class TransactionController {
             entity.setPlanned(req.planned() != null && req.planned());
             entity.setRecurrent(req.recurrent() != null && req.recurrent());
             entity.setRecurrentDay(req.recurrentDay());
-
+            entity.setSatisfied(req.satisfied() != null ? req.satisfied() : true);
+            entity.setReflectionNote(req.reflectionNote());
             ImpactoDeGasto impacto = transactionService.registrar(auth.getName(), entity);
-
             // Si fue gasto y quedó en riesgo, redirigimos con advertencia
             if (impacto != null && impacto.getEstado() == ImpactoDeGasto.Estado.EN_RIESGO) {
                 return "redirect:/transactions?warning=riesgo";
             }
-
             return "redirect:/transactions?ok";
         } catch (BusinessException e) {
             model.addAttribute("error", e.getMessage());

@@ -43,4 +43,14 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             @Param("category") com.Proyecto.BudgetManager.enums.Category category,
             @Param("startDate") String startDate,
             @Param("endDate") String endDate);
+
+    @Query("SELECT t.category, COALESCE(SUM(t.amount), 0) FROM TransactionEntity t " +
+        "WHERE t.user.email = :email AND t.type = 'GASTO' " +
+        "AND t.transactionDate >= :startDate AND t.transactionDate <= :endDate " +
+        "AND t.planned = false " +
+        "GROUP BY t.category")
+    java.util.List<Object[]> sumExpensesByCategory(
+            @Param("email") String email,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate);
 }

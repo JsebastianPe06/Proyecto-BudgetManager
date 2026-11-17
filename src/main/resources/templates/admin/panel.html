@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Panel Admin</title></head>
+<head th:replace="~{fragments/layout :: head('Panel Admin')}"></head>
 <body>
-  <h1>Panel de administración</h1>
-  <a th:href="@{/admin/parameters}">Parámetros del sistema</a>
+    <div th:replace="~{fragments/layout :: layout('Panel de Administración', ~{::main-content})}">
+        <main-content>
+            <div class="card">
+                <h2>Opciones de Administrador</h2>
+                <p class="text-muted mb-4">Desde aquí puedes gestionar la configuración global del sistema.</p>
+                <a th:href="@{/admin/parameters}" class="btn btn-primary">Configurar Parámetros del Sistema</a>
+            </div>
+        </main-content>
+    </div>
 </body>
 </html>

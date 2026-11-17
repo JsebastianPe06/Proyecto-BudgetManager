@@ -20,7 +20,8 @@ public class SecurityConfig {
                                         LoginSuccessHandler success) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/auth/**", "/login", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/", "/auth/**", "/login", "/css/**", "/js/**", "/images/**",
+                "/favicon.ico").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )

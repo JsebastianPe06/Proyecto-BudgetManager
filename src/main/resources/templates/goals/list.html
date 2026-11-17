@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mis Metas de Ahorro')}"></head>
+<body>
+    <div th:replace="~{fragments/layout :: layout('Mis Metas de Ahorro', ~{::main-content})}">
+        <main-content>
+            <div th:if="${param.ok}" class="alert alert-success">Meta creada exitosamente.</div>
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="flex justify-between mb-4">
+                <p class="text-muted">Gestiona tus objetivos financieros y abona a tus metas.</p>
+                <a th:href="@{/goals/new}" class="btn btn-primary">+ Crear Nueva Meta</a>
+            </div>
+
+            <div class="card" style="padding: 0;">
+                <div class="table-wrapper" style="border: none;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Meta</th>
+                                <th>Progreso</th>
+                                <th>Falta</th>
+                                <th>Fecha Límite</th>
+                                <th>Abonar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="goal : ${goals}">
+                                <td style="font-weight: 500;" th:text="${goal.name}"></td>
+                                <td>
+                                    <div style="font-size: 0.75rem; margin-bottom: 0.25rem;" th:text="'$' + ${goal.currentAmount} + ' / $' + ${goal.targetAmount}"></div>
+                                    <div class="progress" style="margin-top: 0;">
+                                        <div class="progress-bar primary" 
+                                             th:style="|width: ${(goal.currentAmount.doubleValue() / goal.targetAmount.doubleValue()) * 100 > 100 ? 100 : (goal.currentAmount.doubleValue() / goal.targetAmount.doubleValue()) * 100}%;|">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-danger" th:text="'$' + (${goal.targetAmount} - ${goal.currentAmount})"></td>
+                                <td th:text="${goal.deadline != null ? goal.deadline : 'Sin límite'}"></td>
+                                <td>
+                                    <form th:action="@{/goals/add-funds}" method="post" class="flex gap-2">
+                                        <input th:replace="~{fragments/layout :: csrf}"/>
+                                        <input type="hidden" name="goalId" th:value="${goal.id}"/>
+                                        <input type="number" name="amount" step="0.01" placeholder="$" required class="form-control" style="width: 100px; padding: 0.25rem;">
+                                        <button type="submit" class="btn btn-sm btn-primary">Abonar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(goals)}">
+                                <td colspan="5" class="text-center text-muted" style="padding: 2rem;">No tienes metas de ahorro creadas.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main-content>
+    </div>
+</body>
+</html>

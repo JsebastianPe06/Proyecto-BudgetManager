@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | BudgetManager'">BudgetManager</title>
+    <link rel="icon" type="image/svg+xml" th:href="@{/images/logo.svg}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+</head>
+<body>
+
+<!-- Fragmento CSRF -->
+<input type="hidden" th:fragment="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+<!-- Layout Principal -->
+<div th:fragment="layout(title, content)" class="app-wrapper">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img th:src="@{/images/logo.svg}" alt="Logo" width="28" height="28">
+            <span>BudgetManager</span>
+        </div>
+        <nav class="sidebar-nav">
+            <!-- Enlaces con data-path para que JS identifique la ruta -->
+            <a th:href="@{/dashboard}" class="nav-item" data-path="/dashboard">Dashboard</a>
+            <a th:href="@{/budget}" class="nav-item" data-path="/budget">Presupuesto</a>
+            <a th:href="@{/transactions}" class="nav-item" data-path="/transactions">Transacciones</a>
+            <a th:href="@{/goals}" class="nav-item" data-path="/goals">Metas de Ahorro</a>
+            <a th:href="@{/reports}" class="nav-item" data-path="/reports">Reportes</a>
+            
+            <div sec:authorize="hasRole('ADMIN')" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; padding-left: 1rem; text-transform: uppercase;">Admin</span>
+                <a th:href="@{/admin}" class="nav-item mt-2" data-path="/admin">Panel</a>
+                <a th:href="@{/admin/parameters}" class="nav-item" data-path="/admin/parameters">Parámetros</a>
+            </div>
+
+            <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                <a th:href="@{/profile}" class="nav-item" data-path="/profile">Mi Perfil</a>
+            </div>
+        </nav>
+    </aside>
+    
+    <!-- Backdrop para móvil -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle" aria-label="Menú">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <div class="flex items-center gap-4">
+                <span class="text-muted" style="font-size: 0.875rem;" sec:authentication="name">Usuario</span>
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <input th:replace="~{fragments/layout :: csrf}"/>
+                    <button type="submit" class="btn btn-outline btn-sm">Cerrar Sesión</button>
+                </form>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <h1 th:if="${title != null}" th:text="${title}" style="margin-bottom: 1.5rem;"></h1>
+            <!-- AQUI VA EL CONTENIDO DE LA PAGINA -->
+            <div th:replace="${content}"></div>
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>
