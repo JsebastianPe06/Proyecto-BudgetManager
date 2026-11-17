@@ -4,7 +4,7 @@ Proyecto enfocado en suplir la necesidad de las personas de controlar y gestiona
 ![Java](https://img.shields.io/badge/Java-21-orange.svg)
 ![SQLite](https://img.shields.io/badge/SQLite-3-blue.svg)
 
-Intregantes: 
+Integrantes: 
 Juan Sebastian Peñuela - jupenuelad@unal.edu.co
 Juan Kandula Restrepo - juarestrepoba@unal.edu.co
 Julián Andrés Sepulveda - jsepulvedacr@unal.edu.co
@@ -21,7 +21,7 @@ El proyecto está diseñado bajo un estilo de **Monolito Clásico en Tres Capas*
 * **Presentación (SSR):** Vistas dinámicas renderizadas en el servidor mediante **Thymeleaf** e impulsadas por controladores **Spring MVC**.
 * **Aplicación:** Servicios de Spring (`@Service`) que coordinan los casos de uso, controlan la seguridad con **Spring Security** y gestionan tareas en segundo plano mediante **`@Scheduled`** (gastos recurrentes y copias de seguridad).
 * **Dominio (Reglas Puras):** Clases y lógica de negocio puras (evaluación de límites de presupuesto, avance de metas e impacto financiero) independientes de frameworks y persitencia.
-* **Datos y Persistencia:** Mapeo de entidades con **Spring Data JPA / Hibernate** sobre una **base de datos relacional embebida (SQLite)** almacenada en un archivo local (`/data/presupuesto.db`). Las migraciones de esquema se gestionan automáticamente mediante **Flyway**.
+* **Datos y Persistencia:** Mapeo de entidades con **Spring Data JPA / Hibernate** sobre una **base de datos relacional embebida (SQLite)** almacenada en un archivo local (`/data/budgetmanager.db`). Las migraciones de esquema se gestionan automáticamente mediante **Flyway**.
 
 ---
 
