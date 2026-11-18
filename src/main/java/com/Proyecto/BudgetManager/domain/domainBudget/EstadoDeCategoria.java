@@ -34,4 +34,6 @@ public final class EstadoDeCategoria {
 
     public BigDecimal getRestante() { return restante; }
     public Estado getEstado() { return estado; }
+    public BigDecimal getLimite() { return limite; }
+    public BigDecimal getGastado() { return gastado; }
 }
