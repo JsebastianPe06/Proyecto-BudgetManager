@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mi Presupuesto')}"></head>
+<body>
+    <div th:replace="~{fragments/layout :: layout('Presupuesto Mensual', ~{::main-content})}">
+        <main-content>
+            <div th:if="${param.ok}" class="alert alert-success">Acción realizada correctamente.</div>
+
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex gap-2">
+                    <a th:href="@{/budget(mes=${mes - 1 < 1 ? 12 : mes - 1}, anio=${mes - 1 < 1 ? anio - 1 : anio})}" class="btn btn-outline">&larr; Anterior</a>
+                    <span style="display: flex; align-items: center; font-weight: 600; padding: 0 1rem;" th:text="|Mes ${mes} / ${anio}|"></span>
+                    <a th:href="@{/budget(mes=${mes + 1 > 12 ? 1 : mes + 1}, anio=${mes + 1 > 12 ? anio + 1 : anio})}" class="btn btn-outline">Siguiente &rarr;</a>
+                </div>
+                <a th:href="@{/budget/new}" class="btn btn-primary" th:if="${budget == null}">Crear Presupuesto</a>
+                <a th:href="@{/budget/limits}" class="btn btn-primary" th:if="${budget != null}">+ Añadir Límite</a>
+            </div>
+
+            <div th:if="${budget == null}" class="card text-center" style="padding: 3rem;">
+                <h3 class="text-muted">Aún no has configurado un presupuesto para este mes.</h3>
+                <a th:href="@{/budget/new}" class="btn btn-primary mt-4">Crear Presupuesto Ahora</a>
+            </div>
+
+            <div th:if="${budget != null}" class="card">
+                <div class="card-header">
+                    <h3 style="margin:0;">Presupuesto Total: <span class="text-primary" th:text="'$' + ${budget.totalAmount}"></span></h3>
+                </div>
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th>Restante</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="entry : ${estados}">
+                                <td style="font-weight: 500;" th:text="${entry.key}"></td>
+                                <td th:text="'$' + ${entry.value.restante}"></td>
+                                <td>
+                                    <span class="badge" 
+                                        th:classappend="${entry.value.estado.toString() == 'SEGURO' ? 'badge-success' : (entry.value.estado.toString() == 'EN_RIESGO' ? 'badge-warning' : 'badge-danger')}"
+                                        th:text="${entry.value.estado}"></span>
+                                </td>
+                            </tr>
+                            <tr th:if="${estados == null or #maps.isEmpty(estados)}">
+                                <td colspan="3" class="text-center text-muted" style="padding: 2rem;">No has definido límites por categoría.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main-content>
+    </div>
+</body>
+</html>

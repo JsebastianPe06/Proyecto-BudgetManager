@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Iniciar Sesión')}"></head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img th:src="@{/images/logo.svg}" alt="Logo" width="48" height="48">
+                <h2>Bienvenido</h2>
+                <p class="text-muted">Ingresa a tu cuenta de BudgetManager</p>
+            </div>
+
+            <div th:if="${param.registered}" class="alert alert-success">Cuenta creada. Ya puedes iniciar sesión.</div>
+            <div th:if="${param.error}" class="alert alert-danger">Credenciales inválidas o cuenta bloqueada.</div>
+            <div th:if="${param.logout}" class="alert alert-info">Has cerrado sesión exitosamente.</div>
+            <div th:if="${param.emailChanged}" class="alert alert-info">Correo actualizado. Inicia sesión nuevamente.</div>
+
+            <form th:action="@{/login}" method="post">
+                <input th:replace="~{fragments/layout :: csrf}"/>
+                
+                <div class="form-group">
+                    <label class="form-label">Correo Electrónico</label>
+                    <input type="email" name="username" class="form-control" placeholder="tu@correo.com" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Ingresar</button>
+            </form>
+
+            <div class="auth-footer">
+                ¿No tienes cuenta? <a th:href="@{/auth/register}">Regístrate aquí</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

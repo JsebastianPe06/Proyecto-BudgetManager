@@ -31,3 +31,15 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/test/java/
+
+
+### SQLite ###
+*.db
+backups/
+*.db-journal
+*.db-wal
+*.db-shm
+data
+
+backups/

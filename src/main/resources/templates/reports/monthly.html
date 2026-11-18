@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Resumen Mensual')}"></head>
+<body>
+    <div th:replace="~{fragments/layout :: layout('Resumen Mensual', ~{::main-content})}">
+        <main-content>
+            
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex gap-2">
+                    <a th:href="@{/reports(mes=${report.month - 1 < 1 ? 12 : report.month - 1}, anio=${report.month - 1 < 1 ? report.year - 1 : report.year})}" class="btn btn-outline">&larr; Anterior</a>
+                    <span style="display: flex; align-items: center; font-weight: 600; padding: 0 1rem;" th:text="|${report.month} / ${report.year}|"></span>
+                    <a th:href="@{/reports(mes=${report.month + 1 > 12 ? 1 : report.month + 1}, anio=${report.month + 1 > 12 ? report.year + 1 : report.year})}" class="btn btn-outline">Siguiente &rarr;</a>
+                </div>
+            </div>
+
+            <!-- KPIs -->
+            <div class="kpi-grid">
+                <div class="kpi-card" style="border-left: 4px solid var(--color-success);">
+                    <div class="kpi-label">Ingresos</div>
+                    <div class="kpi-value text-success" th:text="'$' + ${report.totalIncome}"></div>
+                </div>
+                <div class="kpi-card" style="border-left: 4px solid var(--color-danger);">
+                    <div class="kpi-label">Gastos</div>
+                    <div class="kpi-value text-danger" th:text="'$' + ${report.totalExpenses}"></div>
+                </div>
+                <div class="kpi-card" style="border-left: 4px solid #8e44ad;">
+                    <div class="kpi-label">Ahorro en Metas</div>
+                    <div class="kpi-value" style="color: #8e44ad;" th:text="'$' + ${report.totalSaved}"></div>
+                </div>
+                <div class="kpi-card" style="border-left: 4px solid var(--color-info);">
+                    <div class="kpi-label">Balance Líquido</div>
+                    <div class="kpi-value" style="color: var(--color-info);" th:text="'$' + ${report.balance}"></div>
+                </div>
+            </div>
+            <p class="text-muted mb-4" style="font-size: 0.75rem;">* El "Balance Líquido" es Ingresos - Gastos - Dinero en Metas.</p>
+
+            <!-- Kakebo -->
+            <div class="card mb-4" style="background: #faf5ff; border-color: #d8b4fe;">
+                <h3 style="color: #7e22ce; margin-bottom: 0.5rem;">Nivel de Conciencia Kakebo</h3>
+                <p style="font-size: 1.25rem; font-weight: 700; color: #7e22ce;" th:text="${conciencia}"></p>
+                <p class="text-muted">
+                    <span th:if="${conciencia.toString() == 'ALTO'}">¡Excelente! Has sido muy consciente de tus gastos este mes.</span>
+                    <span th:if="${conciencia.toString() == 'MEDIO'}">Vas por buen camino, pero intenta reflexionar más antes de comprar.</span>
+                    <span th:if="${conciencia.toString() == 'BAJO'}">Cuidado. Más de la mitad de tus gastos no te dejaron satisfecho. Revisa tus impulsos.</span>
+                </p>
+            </div>
+
+            <!-- Tabla -->
+            <div class="card" style="padding: 0;">
+                <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color);">
+                    <h3 style="margin: 0;">Gastos por Categoría</h3>
+                </div>
+                <div class="table-wrapper" style="border: none;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th class="text-right">Monto Gastado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="entry : ${report.expensesByCategory}">
+                                <td th:text="${entry.key}"></td>
+                                <td class="text-right" th:text="'$' + ${entry.value}"></td>
+                            </tr>
+                            <tr th:if="${#maps.isEmpty(report.expensesByCategory)}">
+                                <td colspan="2" class="text-center text-muted" style="padding: 2rem;">No hay gastos registrados este mes.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main-content>
+    </div>
+</body>
+</html>

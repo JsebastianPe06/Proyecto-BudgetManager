@@ -4,7 +4,7 @@ Proyecto enfocado en suplir la necesidad de las personas de controlar y gestiona
 ![Java](https://img.shields.io/badge/Java-21-orange.svg)
 ![SQLite](https://img.shields.io/badge/SQLite-3-blue.svg)
 
-Intregantes: 
+Integrantes: 
 Juan Sebastian Peñuela - jupenuelad@unal.edu.co
 Juan Kandula Restrepo - juarestrepoba@unal.edu.co
 Julián Andrés Sepulveda - jsepulvedacr@unal.edu.co
@@ -21,7 +21,7 @@ El proyecto está diseñado bajo un estilo de **Monolito Clásico en Tres Capas*
 * **Presentación (SSR):** Vistas dinámicas renderizadas en el servidor mediante **Thymeleaf** e impulsadas por controladores **Spring MVC**.
 * **Aplicación:** Servicios de Spring (`@Service`) que coordinan los casos de uso, controlan la seguridad con **Spring Security** y gestionan tareas en segundo plano mediante **`@Scheduled`** (gastos recurrentes y copias de seguridad).
 * **Dominio (Reglas Puras):** Clases y lógica de negocio puras (evaluación de límites de presupuesto, avance de metas e impacto financiero) independientes de frameworks y persitencia.
-* **Datos y Persistencia:** Mapeo de entidades con **Spring Data JPA / Hibernate** sobre una **base de datos relacional embebida (SQLite)** almacenada en un archivo local (`/data/presupuesto.db`). Las migraciones de esquema se gestionan automáticamente mediante **Flyway**.
+* **Datos y Persistencia:** Mapeo de entidades con **Spring Data JPA / Hibernate** sobre una **base de datos relacional embebida (SQLite)** almacenada en un archivo local (`/data/budgetmanager.db`). Las migraciones de esquema se gestionan automáticamente mediante **Flyway**.
 
 ---
 
@@ -36,13 +36,17 @@ El proyecto está diseñado bajo un estilo de **Monolito Clásico en Tres Capas*
 
 ---
 
-## Vista de desarrollo
+## ¿Cómo ejecutar el proyecto?
 
-<img width="1580" height="941" alt="digrama uml" src="https://github.com/user-attachments/assets/2ebc6462-b847-4398-8ef2-6d18d36b3f72" />  
+### Windows
+1. Haz doble clic en el archivo `run.bat` (o ejecútalo desde la terminal).
+2. Abre tu navegador en: `http://localhost:8080`.
 
+### Mac / Linux
+1. Abre una terminal en la carpeta del proyecto.
+2. Ejecuta: `./run.sh` (la primera vez quizás necesites ejecutar `chmod +x run.sh`).
+3. Abre tu navegador en: `http://localhost:8080`.
 
----
-
-## Vista de despliegue
-
-<img width="1270" height="861" alt="Diagrama en blanco" src="https://github.com/user-attachments/assets/5d66179d-73b4-4261-886d-4462d5bc0cce" />
+## Usuarios de prueba
+- **Admin**: `admin@unal.edu.co` / `Admin1234`
+- O crea tu propio usuario en la pantalla de registro.

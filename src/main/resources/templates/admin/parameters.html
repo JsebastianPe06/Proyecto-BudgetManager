@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Parámetros del Sistema')}"></head>
+<body>
+    <div th:replace="~{fragments/layout :: layout('Parámetros del Sistema', ~{::main-content})}">
+        <main-content>
+            <div class="grid grid-cols-2">
+                <!-- Formulario -->
+                <div class="card">
+                    <h3 class="mb-4">Guardar / Actualizar Parámetro</h3>
+                    
+                    <div th:if="${param.ok}" class="alert alert-success">Parámetro guardado correctamente.</div>
+                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                    <form th:action="@{/admin/parameters}" method="post">
+                        <input th:replace="~{fragments/layout :: csrf}"/>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Clave</label>
+                            <select name="key" class="form-control" required>
+                                <option value="currency.base">currency.base</option>
+                                <option value="notification.text">notification.text</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Valor</label>
+                            <input type="text" name="value" class="form-control" placeholder="Ej: COP o Mensaje de alerta" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-4">Guardar Parámetro</button>
+                    </form>
+                </div>
+
+                <!-- Lista Actual -->
+                <div class="card">
+                    <h3 class="mb-4">Parámetros Actuales</h3>
+                    <div class="table-wrapper">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="p : ${params}">
+                                    <td style="font-family: monospace;" th:text="${p.key}"></td>
+                                    <td th:text="${p.value}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main-content>
+    </div>
+</body>
+</html>

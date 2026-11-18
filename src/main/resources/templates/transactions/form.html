@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Nueva Transacción')}"></head>
+<body>
+    <div th:replace="~{fragments/layout :: layout('Registrar Transacción', ~{::main-content})}">
+        <main-content>
+            <div class="card" style="max-width: 700px;">
+                
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                <form th:action="@{/transactions/new}" th:object="${form}" method="post">
+                    <input th:replace="~{fragments/layout :: csrf}"/>
+                    
+                    <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+                        <strong>Por favor corrige los siguientes errores:</strong>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+
+                    <div class="grid grid-cols-2">
+                        <div class="form-group">
+                            <label class="form-label">Tipo</label>
+                            <select th:field="*{type}" id="typeSelect" class="form-control">
+                                <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Monto ($)</label>
+                            <input type="number" th:field="*{amount}" class="form-control" step="0.01" required>
+                            <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="form-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2">
+                        <div class="form-group">
+                            <label class="form-label">Categoría</label>
+                            <select th:field="*{category}" class="form-control">
+                                <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Prioridad</label>
+                            <select th:field="*{priority}" class="form-control">
+                                <option th:each="p : ${priorities}" th:value="${p}" th:text="${p}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" th:field="*{transactionDate}" class="form-control" required>
+                        <span th:if="${#fields.hasErrors('transactionDate')}" th:errors="*{transactionDate}" class="form-error"></span>
+                    </div>
+
+                    <!-- Sección Gastos -->
+                    <div id="gastosSection" style="display: none; background: var(--bg-body); padding: 1.5rem; border-radius: var(--radius-md); margin-top: 1.5rem;">
+                        <h4 style="margin-bottom: 1rem;">Opciones para Gastos</h4>
+                        
+                        <label class="form-check">
+                            <input type="checkbox" th:field="*{planned}"> 
+                            Es un gasto planificado (aún no realizado)
+                        </label>
+
+                        <label class="form-check">
+                            <input type="checkbox" id="recurrentCheck" th:field="*{recurrent}"> 
+                            Es un gasto recurrente (se repite cada mes)
+                        </label>
+                        
+                        <div id="recurrentDayDiv" style="display: none; margin-top: 1rem; padding-left: 1.5rem;">
+                            <label class="form-label">Día del mes (1-31)</label>
+                            <input type="number" min="1" max="31" th:field="*{recurrentDay}" class="form-control" style="max-width: 120px;">
+                        </div>
+
+                        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                            <h4 style="margin-bottom: 1rem; color: #8e44ad;">Reflexión Kakebo</h4>
+                            <label class="form-check">
+                                <input type="checkbox" th:field="*{satisfied}" checked> 
+                                ¿Fue una compra consciente y satisfactoria?
+                            </label>
+                            <div class="form-group mt-4">
+                                <label class="form-label">Nota de reflexión</label>
+                                <textarea th:field="*{reflectionNote}" class="form-control" rows="3" placeholder="¿Por qué lo compraste?"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Guardar Transacción</button>
+                        <a th:href="@{/transactions}" class="btn btn-outline">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </main-content>
+    </div>
+
+    <!-- Script de lógica dinámica local -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var typeSelect = document.getElementById('typeSelect');
+            var gastosSection = document.getElementById('gastosSection');
+            var recurrentCheck = document.getElementById('recurrentCheck');
+            var recurrentDayDiv = document.getElementById('recurrentDayDiv');
+            
+            function toggleGastosSection() {
+                gastosSection.style.display = typeSelect.value === 'GASTO' ? 'block' : 'none';
+            }
+            function toggleRecurrentDay() {
+                recurrentDayDiv.style.display = recurrentCheck.checked ? 'block' : 'none';
+            }
+            
+            if (typeSelect) { typeSelect.addEventListener('change', toggleGastosSection); toggleGastosSection(); }
+            if (recurrentCheck) { recurrentCheck.addEventListener('change', toggleRecurrentDay); toggleRecurrentDay(); }
+        });
+    </script>
+</body>
+</html>

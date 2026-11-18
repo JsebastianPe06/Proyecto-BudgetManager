@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
-<html>
-    <head>
-        <title>Pagina pricipal (Prueba)</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-        <h1>Wololo OoooOoOohh</h1>
-    </body>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Principal')}"></head>
+<body>
+    <div th:replace="~{fragments/layout :: layout('Panel Principal', ~{::main-content})}">
+        <main-content>
+            <div class="card">
+                <h2>Bienvenido al sistema</h2>
+                <p class="text-muted mb-4">Selecciona una opción para comenzar a gestionar tu presupuesto.</p>
+                <div class="flex gap-4">
+                    <a th:href="@{/dashboard}" class="btn btn-primary">Ir al Dashboard</a>
+                    <a th:href="@{/transactions}" class="btn btn-outline">Ver Transacciones</a>
+                </div>
+            </div>
+        </main-content>
+    </div>
+</body>
 </html>
