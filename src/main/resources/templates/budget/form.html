@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Nuevo Presupuesto')}"></head>
+<body>
+    <div th:replace="~{fragments/layout :: layout('Configurar Presupuesto', ~{::main-content})}">
+        <main-content>
+            <div class="card" style="max-width: 600px;">
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                
+                <form th:action="@{/budget/new}" th:object="${form}" method="post">
+                    <input th:replace="~{fragments/layout :: csrf}"/>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Mes (1-12)</label>
+                        <input type="number" th:field="*{month}" class="form-control" min="1" max="12">
+                        <span th:if="${#fields.hasErrors('month')}" th:errors="*{month}" class="form-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Año</label>
+                        <input type="number" th:field="*{year}" class="form-control">
+                        <span th:if="${#fields.hasErrors('year')}" th:errors="*{year}" class="form-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Monto Total para el mes ($)</label>
+                        <input type="number" th:field="*{totalAmount}" class="form-control" step="0.01">
+                        <span th:if="${#fields.hasErrors('totalAmount')}" th:errors="*{totalAmount}" class="form-error"></span>
+                    </div>
+
+                    <div class="flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Guardar Presupuesto</button>
+                        <a th:href="@{/budget}" class="btn btn-outline">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </main-content>
+    </div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
+<body>
+    <div th:replace="~{fragments/layout :: layout('Dashboard', ~{::main-content})}">
+        <main-content>
+            <!-- KPIs Rápidos -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Presupuesto del Mes</div>
+                    <div class="kpi-value text-primary" th:text="${budget != null ? '$' + budget.totalAmount : 'No configurado'}"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2">
+                <!-- Sección Presupuesto -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 style="margin:0;">Presupuesto por Categoría</h3>
+                        <a th:href="@{/budget}" class="btn btn-sm btn-outline">Ver todo</a>
+                    </div>
+                    
+                    <div th:if="${budget == null}">
+                        <p class="text-muted">No has configurado un presupuesto para este mes.</p>
+                        <a th:href="@{/budget/new}" class="btn btn-primary mt-4">Crear Presupuesto</a>
+                    </div>
+                    
+                    <div th:if="${budget != null}">
+                        <div th:each="entry : ${estadosCategorias}" class="mb-4">
+                            <div class="flex justify-between" style="font-size: 0.875rem; margin-bottom: 0.25rem;">
+                                <span style="font-weight: 500;" th:text="${entry.key}"></span>
+                                <span class="badge" 
+                                    th:classappend="${entry.value.estado.toString() == 'SEGURO' ? 'badge-success' : (entry.value.estado.toString() == 'EN_RIESGO' ? 'badge-warning' : 'badge-danger')}"
+                                    th:text="${entry.value.estado}"></span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" 
+                                    th:classappend="${entry.value.estado.toString() == 'SEGURO' ? 'success' : (entry.value.estado.toString() == 'EN_RIESGO' ? 'warning' : 'danger')}"
+                                     th:style="|width: ${(1 - (entry.value.restante.doubleValue() / entry.value.limite.doubleValue())) * 100}%;|">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección Metas -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 style="margin:0;">Metas de Ahorro</h3>
+                        <a th:href="@{/goals}" class="btn btn-sm btn-outline">Gestionar</a>
+                    </div>
+                    
+                    <div th:if="${#lists.isEmpty(metas)}">
+                        <p class="text-muted">No tienes metas de ahorro activas.</p>
+                        <a th:href="@{/goals/new}" class="btn btn-primary mt-4">Crear Meta</a>
+                    </div>
+                    
+                    <div th:if="${!#lists.isEmpty(metas)}">
+                        <div th:each="meta : ${metas}" class="mb-4">
+                            <div class="flex justify-between" style="font-size: 0.875rem; margin-bottom: 0.25rem;">
+                                <span style="font-weight: 500;" th:text="${meta.name}"></span>
+                                <span class="text-muted" th:text="'$' + ${meta.currentAmount} + ' / $' + ${meta.targetAmount}"></span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar primary" 
+                                     th:style="|width: ${(meta.currentAmount.doubleValue() / meta.targetAmount.doubleValue()) * 100 > 100 ? 100 : (meta.currentAmount.doubleValue() / meta.targetAmount.doubleValue()) * 100}%;|">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main-content>
+    </div>
+</body>
+</html>

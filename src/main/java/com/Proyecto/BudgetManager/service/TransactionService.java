@@ -1,58 +1,80 @@
 package com.Proyecto.BudgetManager.service;
 
-import com.Proyecto.BudgetManager.domain.CategoriaValid;
-import com.Proyecto.BudgetManager.domain.MovimientoValid;
-import com.Proyecto.BudgetManager.entity.Categoria;
-import com.Proyecto.BudgetManager.entity.Movimiento;
-import com.Proyecto.BudgetManager.entity.fecha;
-import com.Proyecto.BudgetManager.enums.PrioridadGasto;
-import com.Proyecto.BudgetManager.enums.TipoGasto;
-import com.Proyecto.BudgetManager.enums.TipoMovimiento;
-import com.Proyecto.BudgetManager.repository.MovimientoRepository;
+import com.Proyecto.BudgetManager.domain.domainTransaction.ImpactoDeGasto;
+import com.Proyecto.BudgetManager.entity.TransactionEntity;
+import com.Proyecto.BudgetManager.entity.UserEntity;
+import com.Proyecto.BudgetManager.enums.TransactionType;
+import com.Proyecto.BudgetManager.exception.BusinessException;
+import com.Proyecto.BudgetManager.repository.TransactionRepository;
+import com.Proyecto.BudgetManager.repository.UserRepository;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
+import java.util.List;
 
-// @Service
+@Service
 public class TransactionService {
-    
-    MovimientoValid movimientoValid = new MovimientoValid();
-    CategoriaValid categoriaValid= new CategoriaValid();;
-    
-    public void registrarGasto(int userId,String descripcion, BigDecimal monto,fecha date, Categoria categoria, 
-            PrioridadGasto prioridad, TipoGasto tipo) 
-    {
-        Movimiento move = new Movimiento(0, userId,descripcion, monto, date, TipoMovimiento.GASTO, categoria.getId(),
-                prioridad,tipo);
 
-        movimientoValid.validar(move);
+    private final TransactionRepository transactions;
+    private final UserRepository users;
 
-        categoriaValid.validarPropiedad(categoria, userId);
-
-        categoriaValid.validarTipo(categoria, move.getTipo());
-
-        // MovimientoRepository.guardar(move);
-    }
-    
-    public void registrarIngreso(int userId,String descripcion, BigDecimal monto,fecha date, Categoria categoria) 
-    {
-        Movimiento move = new Movimiento(0, userId,descripcion, monto, date, TipoMovimiento.INGRESO, categoria.getId());
-
-        movimientoValid.validar(move);
-
-        categoriaValid.validarPropiedad(categoria, userId);
-
-        categoriaValid.validarTipo(categoria, move.getTipo());
-
-        //MovimientoRepository.guardar(move);
+    public TransactionService(TransactionRepository transactions, UserRepository users) {
+        this.transactions = transactions;
+        this.users = users;
     }
 
-    public void getMovimientosPorPerido()
-    {
-        
+    /**
+     * Registra una transacción (ingreso o gasto) para el usuario autenticado.
+     * Si es un gasto, evalúa el impacto antes de guardar.
+     * Devuelve el impacto si fue gasto; null si fue ingreso.
+     */
+    @Transactional
+    public ImpactoDeGasto registrar(String email, TransactionEntity nueva) {
+        UserEntity user = users.findByEmail(email)
+                .orElseThrow(() -> new BusinessException("Usuario no encontrado"));
+        if (nueva.getAmount() == null || nueva.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BusinessException("El monto debe ser mayor que cero");
+        }
+        nueva.setUser(user);
+        if (nueva.getTransactionDate() == null || nueva.getTransactionDate().isBlank()) {
+            nueva.setTransactionDate(java.time.LocalDate.now().toString());
+        }
+        ImpactoDeGasto impacto = null;
+        if (nueva.getType() == TransactionType.GASTO && !nueva.isPlanned()) {
+            BigDecimal saldo = calcularSaldoActual(email);
+            impacto = ImpactoDeGasto.evaluar(saldo, nueva.getAmount());
+            if (impacto.esInsuficiente()) {
+                throw new BusinessException(
+                        "Saldo insuficiente. Disponible: " + saldo + ", gasto solicitado: " + nueva.getAmount());
+            }
+        }
+        transactions.save(nueva);
+        return impacto;
     }
 
-    public void eliminarMovimiento(int userId,int Id)
-    {
-        //MovimientoRepository.eliminar(Id, userId);
+    /**
+     * Calcula el saldo actual del usuario: suma de ingresos - suma de gastos reales (no planificados).
+     */
+    public BigDecimal calcularSaldoActual(String email) {
+        // Usamos String en formato ISO
+        String inicio = "2000-01-01";
+        String fin = "2100-12-31";
+        BigDecimal ingresos = transactions.sumAmountByUserAndTypeAndDateRange(
+                email, TransactionType.INGRESO, inicio, fin);
+        BigDecimal gastos = transactions.sumAmountByUserAndTypeAndDateRange(
+                email, TransactionType.GASTO, inicio, fin);
+        if (ingresos == null) ingresos = BigDecimal.ZERO;
+        if (gastos == null) gastos = BigDecimal.ZERO;
+        return ingresos.subtract(gastos);
     }
-    
+
+    public List<TransactionEntity> findByEmail(String email) {
+        return transactions.findByUserEmailOrderByTransactionDateDesc(email);
+    }
+
+    public List<TransactionEntity> findByEmailAndDateRange(String email, String from, String to) {
+        return transactions.findByUserEmailAndTransactionDateBetweenOrderByTransactionDateDesc(email, from, to);
+    }
 }

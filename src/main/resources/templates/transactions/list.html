@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mis Transacciones')}"></head>
+<body>
+    <div th:replace="~{fragments/layout :: layout('Mis Transacciones', ~{::main-content})}">
+        <main-content>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            <div th:if="${param.ok}" class="alert alert-success">Transacción registrada correctamente.</div>
+            <div th:if="${param.warning != null and param.warning[0] == 'riesgo'}" class="alert alert-warning">
+                ¡Advertencia! Tu saldo ha quedado por debajo del 10%.
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+                <div class="kpi-card" style="padding: 1rem 1.5rem; border-left: 4px solid var(--color-primary);">
+                    <span class="kpi-label">Saldo Actual</span>
+                    <div class="kpi-value" style="font-size: 1.5rem;" th:text="'$' + (${saldo != null} ? ${saldo} : '0.00')"></div>
+                </div>
+                <a th:href="@{/transactions/new}" class="btn btn-primary">+ Nueva Transacción</a>
+            </div>
+
+            <div class="card" style="padding: 0;">
+                <div class="table-wrapper" style="border: none;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Categoría</th>
+                                <th>Monto</th>
+                                <th>Estado</th>
+                                <th>Reflexión</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="tx : ${transactions}" th:if="${transactions != null}">
+                                <td th:text="${tx.transactionDate}"></td>
+                                <td>
+                                    <span class="badge" 
+                                        th:classappend="${tx.type.toString() == 'INGRESO' ? 'badge-success' : 'badge-info'}"
+                                        th:text="${tx.type}"></span>
+                                </td>
+                                <td th:text="${tx.category}"></td>
+                                <td style="font-weight: 600;" 
+                                    th:classappend="${tx.type.toString() == 'INGRESO' ? 'text-success' : 'text-danger'}"
+                                    th:text="'$' + ${tx.amount}"></td>
+                                <td>
+                                    <span th:if="${tx.planned}" class="badge badge-warning">Planificado</span>
+                                    <span th:if="${!tx.planned}" class="badge badge-success">Realizado</span>
+                                </td>
+                                <td>
+                                    <details th:if="${tx.reflectionNote != null && !tx.reflectionNote.isEmpty()}">
+                                        <summary style="cursor: pointer; font-size: 0.75rem; color: var(--color-primary);">Ver nota</summary>
+                                        <p style="font-size: 0.75rem; margin-top: 0.5rem; color: var(--text-muted);" th:text="${tx.reflectionNote}"></p>
+                                    </details>
+                                    <span th:if="${tx.reflectionNote == null || tx.reflectionNote.isEmpty()}" class="text-muted" style="font-size: 0.75rem;">-</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${transactions == null or #lists.isEmpty(transactions)}">
+                                <td colspan="6" class="text-center text-muted" style="padding: 2rem;">No hay transacciones registradas.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main-content>
+    </div>
+</body>
+</html>
